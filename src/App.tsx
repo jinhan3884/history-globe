@@ -8,32 +8,35 @@ function App() {
   useEffect(() => {
     if (!cesiumContainer.current) return;
 
-    // Cesium Ion Token (아래에 본인 토큰을 넣으세요)
-    //Cesium.Ion.defaultAccessToken = 'YOUR_CESIUM_ION_TOKEN_HERE';
+    // Token은 나중에 넣으세요 (지금은 생략)
+    // Cesium.Ion.defaultAccessToken = 'YOUR_TOKEN';
 
-    const viewer = new Cesium.Viewer(cesiumContainer.current, {
-      terrainProvider: Cesium.createWorldTerrain(),
-      timeline: false,     // 나중에 시간 슬라이더 켜기
-      animation: false,
-    });
+    const initCesium = async () => {
+      const viewer = new Cesium.Viewer(cesiumContainer.current!, {
+        terrainProvider: await Cesium.createWorldTerrainAsync(),  // ← 여기 수정됨
+        timeline: false,
+        animation: false,
+      });
 
-    // 서울에서 시작
-    viewer.camera.flyTo({
-      destination: Cesium.Cartesian3.fromDegrees(126.98, 37.56, 1500000),
-      duration: 2,
-    });
+      viewer.camera.flyTo({
+        destination: Cesium.Cartesian3.fromDegrees(126.98, 37.56, 1500000),
+        duration: 2,
+      });
 
-    // 현재 국가 경계 추가 (예시)
-    Cesium.GeoJsonDataSource.load('https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson')
-      .then((dataSource) => {
-        viewer.dataSources.add(dataSource);
-        viewer.zoomTo(dataSource);
-      })
-      .catch(console.error);
+      // 국가 경계
+      Cesium.GeoJsonDataSource.load('https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson')
+        .then((dataSource) => {
+          viewer.dataSources.add(dataSource);
+        });
 
-    // 클린업
+      return viewer;
+    };
+
+    let viewer: Cesium.Viewer;
+    initCesium().then(v => viewer = v);
+
     return () => {
-      viewer.destroy();
+      if (viewer) viewer.destroy();
     };
   }, []);
 
