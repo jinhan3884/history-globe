@@ -3,37 +3,36 @@ import * as Cesium from 'cesium';
 import 'cesium/Build/Cesium/Widgets/widgets.css';
 
 function App() {
-  const cesiumContainer = useRef<HTMLDivElement>(null);
+  const cesiumRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!cesiumContainer.current) return;
+    if (!cesiumRef.current) return;
 
-    const viewer = new Cesium.Viewer(cesiumContainer.current, {
-      terrainProvider: new Cesium.EllipsoidTerrainProvider(), // ← 지형 임시 OFF
-      timeline: false,
-      animation: false,
+    const viewer = new Cesium.Viewer(cesiumRef.current, {
+      terrainProvider: new Cesium.EllipsoidTerrainProvider(), // 기본 구형 지구
       baseLayerPicker: false,
+      geocoder: false,
+      homeButton: true,
+      sceneModePicker: false,
+      navigationHelpButton: false,
+      animation: false,
+      timeline: false,
     });
 
-    // 서울 위치
+    // 초기 위치 (한국 근처)
     viewer.camera.flyTo({
-      destination: Cesium.Cartesian3.fromDegrees(126.98, 37.56, 2000000),
-      duration: 3,
+      destination: Cesium.Cartesian3.fromDegrees(127, 37.5, 2500000),
+      duration: 2
     });
 
-    // 국가 경계
-    Cesium.GeoJsonDataSource.load('https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson')
-      .then((dataSource) => {
-        viewer.dataSources.add(dataSource);
-      })
-      .catch(console.error);
-
-    return () => viewer.destroy();
+    return () => {
+      viewer.destroy();
+    };
   }, []);
 
   return (
-    <div style={{ width: '100vw', height: '100vh', overflow: 'hidden' }}>
-      <div ref={cesiumContainer} style={{ width: '100%', height: '100%' }} />
+    <div style={{ width: '100vw', height: '100vh' }}>
+      <div ref={cesiumRef} style={{ width: '100%', height: '100%' }} />
     </div>
   );
 }
