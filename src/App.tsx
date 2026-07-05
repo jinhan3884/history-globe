@@ -8,40 +8,31 @@ function App() {
   useEffect(() => {
     if (!cesiumContainer.current) return;
 
-    // Token은 나중에 넣으세요 (지금은 생략)
-    // Cesium.Ion.defaultAccessToken = 'YOUR_TOKEN';
+    const viewer = new Cesium.Viewer(cesiumContainer.current, {
+      terrainProvider: new Cesium.EllipsoidTerrainProvider(), // ← 지형 임시 OFF
+      timeline: false,
+      animation: false,
+      baseLayerPicker: false,
+    });
 
-    const initCesium = async () => {
-      const viewer = new Cesium.Viewer(cesiumContainer.current!, {
-        terrainProvider: await Cesium.createWorldTerrainAsync(),  // ← 여기 수정됨
-        timeline: false,
-        animation: false,
-      });
+    // 서울 위치
+    viewer.camera.flyTo({
+      destination: Cesium.Cartesian3.fromDegrees(126.98, 37.56, 2000000),
+      duration: 3,
+    });
 
-      viewer.camera.flyTo({
-        destination: Cesium.Cartesian3.fromDegrees(126.98, 37.56, 1500000),
-        duration: 2,
-      });
+    // 국가 경계
+    Cesium.GeoJsonDataSource.load('https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson')
+      .then((dataSource) => {
+        viewer.dataSources.add(dataSource);
+      })
+      .catch(console.error);
 
-      // 국가 경계
-      Cesium.GeoJsonDataSource.load('https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson')
-        .then((dataSource) => {
-          viewer.dataSources.add(dataSource);
-        });
-
-      return viewer;
-    };
-
-    let viewer: Cesium.Viewer;
-    initCesium().then(v => viewer = v);
-
-    return () => {
-      if (viewer) viewer.destroy();
-    };
+    return () => viewer.destroy();
   }, []);
 
   return (
-    <div style={{ width: '100vw', height: '100vh' }}>
+    <div style={{ width: '100vw', height: '100vh', overflow: 'hidden' }}>
       <div ref={cesiumContainer} style={{ width: '100%', height: '100%' }} />
     </div>
   );
