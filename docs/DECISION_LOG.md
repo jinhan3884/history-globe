@@ -107,3 +107,26 @@ get the neutral label `Unknown / Unrecorded territory` stored on
 `entity.name`, so the viewer's tooltip side never draws empty text. The
 fallback string is exported once from `src/geojson/types.ts` so the value
 cannot drift between code paths.
+
+## D-020 — M2 diagnostics is read-only
+
+**Decision:** `src/geojson/diagnostics.ts` produces a `DiagnosticsReport`
+without mutating the source `FeatureCollection`. Repair belongs to M3; M2
+exists to give M3 reliable coordinates to act on and to surface correlates
+of the known polygon artifact.
+
+## D-021 — Winding convention flagged, not fixed in M2
+
+**Decision:** Diagnostics flag `winding-cw-outer` and `winding-ccw-hole` as
+warnings (not errors) per RFC 7946's right-hand rule recommendation. M2 makes
+no winding change. Result on the live dataset is 794 `winding-cw-outer`
+occurrences across 435/440 features, which is the dominant correlate of the
+known polygon artifact and the leading hypothesis for M3 normalization.
+
+## D-022 — Diagnostic issue code vocabulary
+
+**Decision:** Codes `coord-malformed`, `coord-non-finite`,
+`lon-out-of-range`, `lat-out-of-range`, `ring-degenerate`, `ring-open`,
+`duplicate-point`, `lon-jump`, `winding-cw-outer`, `winding-ccw-hole`. The
+set is closed and stable; M3 normalizer will consume these exact codes to
+decide what to repair, and any new code added later requires a paired test.

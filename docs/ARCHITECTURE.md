@@ -142,3 +142,19 @@ Separation of concerns verified by import direction:
 The generic-vs-rendering split required by `AGENTS.md` holds; this is the
 contract that protects M2/M3 coordinate-level work from accidentally
 coupling to Cesium.
+
+## Milestone 2 realized
+
+The generic `geojson/` layer now owns diagnostics independent of rendering:
+
+```
+src/geojson/
+  types.ts          Minimal RFC-7946 typings + UNNAMED_LABEL
+  loadGeoJson.ts    fetch + parse + structural validation (no coordinate repair)
+  diagnostics.ts    pure per-feature issue detection -> DiagnosticsReport
+  report.ts         DiagnosticsReport/Summary types + dev-mode text formatter
+```
+
+`app.ts` runs `diagnoseFeatureCollection` against the loaded collection
+before `renderGeoJson`, and prints `formatDevSummary` to the console in
+dev only. No production output. No source-data mutation at any point.

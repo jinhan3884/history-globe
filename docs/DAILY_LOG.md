@@ -182,3 +182,85 @@ preview`; the dataset and Cesium static assets are served identically.
 - No Cloudflare deployment, no analytics, no share buttons (M5/M6).
 - No React, no router, no state library (forbidden by AGENTS.md, holding).
 - No additional dataset files loaded.
+
+## Milestone 2 — Geometry diagnostics first (completed)
+
+Added a deterministic, mutation-free diagnostic pipeline
+(`src/geojson/diagnostics.ts` + `src/geojson/report.ts`). `app.ts` now runs
+the diagnostics against the loaded collection and prints a dev-only summary
+to the console before handing the data to the renderer. The original dataset
+is never touched.
+
+### Inspections implemented
+
+- non-finite coordinate — `coord-non-finite` (error)
+- malformed coordinate — `coord-malformed` (error)
+- longitude out of [-180,180] — `lon-out-of-range` (error)
+- latitude out of [-90, 90] — `lat-out-of-range` (error)
+- ring with fewer than 4 pts — `ring-degenerate` (error)
+- ring not closed — `ring-open` (error)
+- consecutive duplicate point — `duplicate-point` (warning)
+- longitude jump >= 180° — `lon-jump` (warning)
+- outer ring CW — `winding-cw-outer` (warning)
+- hole ring CCW — `winding-ccw-hole` (warning)
+
+Path-style `path` field (e.g. `polygon[0].ring[3].point[5]`) is recorded for
+each issue so M3 can act on exactly the same coordinate.
+
+### Verification — all green
+
+- `npm run typecheck` — clean.
+- `npm run lint` — clean (one `unicorn/no-array-sort` warning self-fixed by
+  switching to `Array#toSorted`).
+- `npm run test` — 3 files / 18 tests pass (12 new diagnostics tests +
+  6 from M1).
+- `npm run build` — succeeds; bundle size unchanged (diagnostics is a pure
+  TS module, no new runtime deps).
+- Ran diagnostics against the live `world_100.geojson` via `vite-node`:
+
+  ```
+  features:        440
+  clean:            5
+  with warnings:   435
+  with errors:       0
+  rings total:     821
+  positions total: 30235
+  issues by code:
+      winding-cw-outer: 794
+      winding-ccw-hole: 5
+      duplicate-point: 4
+  ```
+
+### Findings — principal correlate of the known artifact
+
+- 0 structural errors. Dateline crossings and non-finite coords are absent,
+  so the artifact is **not** the result of broken coordinates in the source.
+- 435/440 features are flagged, dominated by `winding-cw-outer` (794
+  occurrences). The dataset features' outer rings are predominantly
+  Clockwise, opposite to the RFC 7946 right-hand rule recommendation that
+  Cesium's `GeoJsonDataSource` expects.
+- This is the leading hypothesis for the polygon rendering artifact: the
+  misorientated outer ring makes the triangulator infer an inside-out polygon
+  and fill the complementary space with thin triangular artifacts.
+- M3 will normalise winding conservatively (flip CW outer → CCW, CCW hole →
+  CW) and re-test the artifact. If the artifact remains, M4 falls back to a
+  feature-specific strategy.
+
+### Residual risks carried forward
+
+- R7-M2: M2 inspection does not detect self-intersection. A ring that crosses
+  itself passes all current checks. If M3 normalisation does not resolve the
+  artifact, M4 will introduce a self-intersection test.
+- R8-M2: The 4 `duplicate-point` warnings are minor and could be removed in
+  M3; the 5 `winding-ccw-hole` warnings affect only 5 hole rings.
+- R5-M1 (the artifact itself) persists — by design; M3 owns the fix attempt.
+
+### What was deliberately NOT done
+
+- No coordinate mutation, winding flip, ring closure, or duplicate removal
+  (M3).
+- No Cesium-side rendering change.
+- No CLI tooling around diagnostics (the `vite-node` run was a one-off
+  verification, not a shipped command).
+- No public/exposed diagnostic UI; the summary is dev-bundle-only via
+  `import.meta.env.DEV`.

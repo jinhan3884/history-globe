@@ -4,6 +4,8 @@ import { createViewer } from './cesium/createViewer';
 import { renderGeoJson } from './cesium/renderGeoJson';
 import { installInteraction } from './cesium/interaction';
 import { GeoJsonLoadError, loadGeoJson } from './geojson/loadGeoJson';
+import { diagnoseFeatureCollection } from './geojson/diagnostics';
+import { formatDevSummary } from './geojson/report';
 import { createLoading } from './ui/loading';
 import { createErrorPanel } from './ui/errorPanel';
 import { createTooltip } from './ui/tooltip';
@@ -79,6 +81,15 @@ async function loadDataset(
   try {
     const result = await loadGeoJson(DATASET_PATH);
     loading.setText(`Loaded ${result.featureCount} features, drawing…`);
+
+    // Diagnostics run *before* render so the dev console shows what the
+    // renderer is about to see. We never mutate the data here; M2 is
+    // observation only. The summary print is dev-bundle-only per AGENTS.md.
+    if (import.meta.env.DEV) {
+      const report = diagnoseFeatureCollection(result.collection);
+      console.info(formatDevSummary(report.summary));
+    }
+
     const dataSource = await renderGeoJson(viewer, result.collection);
     loading.hide();
     await viewer.flyTo(dataSource);

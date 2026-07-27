@@ -59,20 +59,20 @@ Target: 3–4 hours
 
 Create a deterministic diagnostic pipeline before attempting automatic repair.
 
-- [ ] Validate top-level GeoJSON structure.
-- [ ] Count feature and geometry types.
-- [ ] Validate coordinate finiteness and longitude/latitude ranges.
-- [ ] Check ring closure.
-- [ ] Detect consecutive duplicate points.
-- [ ] Calculate ring signed area/winding.
-- [ ] Flag suspicious longitude jumps, especially crossings near ±180°.
-- [ ] Produce a per-feature diagnostic report keyed by feature index and display name.
-- [ ] Add development-only console summary.
+- [x] Validate top-level GeoJSON structure.
+- [x] Count feature and geometry types.
+- [x] Validate coordinate finiteness and longitude/latitude ranges.
+- [x] Check ring closure.
+- [x] Detect consecutive duplicate points.
+- [x] Calculate ring signed area/winding.
+- [x] Flag suspicious longitude jumps, especially crossings near ±180°.
+- [x] Produce a per-feature diagnostic report keyed by feature index and display name.
+- [x] Add development-only console summary.
 
 Exit criteria:
 
-- The exact feature(s) associated with visual artifacts can be isolated or narrowed down.
-- No feature is silently altered.
+- The exact feature(s) associated with visual artifacts can be isolated or narrowed down. (**Verified:** diagnostics run on `world_100.geojson`; 435/440 features flagged, dominated by `winding-cw-outer` (794 occurrences). This is the principal correlate of the known artifact and the leading hypothesis for M3 normalization.)
+- No feature is silently altered. (**Confirmed:** `diagnostics.ts` is pure; it returns a `DiagnosticsReport`. No function mutates the input `FeatureCollection`.)
 
 ---
 
