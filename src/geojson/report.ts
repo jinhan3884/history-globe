@@ -122,3 +122,82 @@ export function formatDevSummary(summary: DiagnosticsSummary): string {
     codes.length > 0 ? codes : '    (none)',
   ].join('\n');
 }
+
+// ─── Repair report (M3) ────────────────────────────────────────────────
+
+/**
+ * Granular action taken by the normalizer. Stable `code` so the dev summary
+ * can be histogrammed just like the diagnostics codes.
+ */
+export type RepairAction =
+  | 'removed-non-finite-coord'
+  | 'removed-duplicate-point'
+  | 'closed-ring'
+  | 'dropped-degenerate-ring'
+  | 'rewound-outer-ring'
+  | 'rewound-hole-ring'
+  | 'dropped-degenerate-polygon'
+  | 'dropped-feature-no-polygons';
+
+export interface RepairEntry {
+  code: RepairAction;
+  /** Coordinate-tree path so the entry can be cross-referenced with the
+   *  diagnostic path. */
+  path: string;
+  /** Optional human-friendly detail. */
+  detail?: string;
+}
+
+export interface FeatureRepairReport {
+  featureIndex: number;
+  displayName: string;
+  /** Whether the feature survived normalisation (i.e. has at least one
+   *  polygon with at least one valid outer ring remaining). */
+  kept: boolean;
+  entries: RepairEntry[];
+}
+
+export interface RepairReport {
+  features: FeatureRepairReport[];
+  /** Histogram keyed by RepairAction code. */
+  actionCounts: Record<string, number>;
+  /** Number of features that did not survive normalisation. */
+  droppedFeatureCount: number;
+}
+
+/**
+ * Aggregate per-feature entries into a single RepairReport. Centralised so
+ * callers never recompute it inconsistently.
+ */
+export function summariseRepairs(reports: FeatureRepairReport[]): RepairReport {
+  const actionCounts: Record<string, number> = {};
+  let droppedFeatureCount = 0;
+  for (const r of reports) {
+    if (!r.kept) droppedFeatureCount += 1;
+    for (const entry of r.entries) {
+      actionCounts[entry.code] = (actionCounts[entry.code] ?? 0) + 1;
+    }
+  }
+  return {
+    features: reports,
+    actionCounts,
+    droppedFeatureCount,
+  };
+}
+
+/**
+ * Dev-mode text summary of repair activity, parallel in spirit to
+ * `formatDevSummary`.
+ */
+export function formatDevRepairSummary(report: RepairReport): string {
+  const codes = Object.entries(report.actionCounts)
+    .toSorted((a, b) => b[1] - a[1])
+    .map(([code, n]) => `    ${code}: ${n}`)
+    .join('\n');
+  return [
+    '[history-atlas] geometry repairs applied',
+    `  features dropped: ${report.droppedFeatureCount}`,
+    '  actions by code:',
+    codes.length > 0 ? codes : '    (none)',
+  ].join('\n');
+}

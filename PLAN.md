@@ -82,23 +82,23 @@ Target: 4–6 hours
 
 Implement safe transformations only:
 
-- [ ] Remove non-finite coordinates.
-- [ ] Normalize longitude only where the intended behavior is unambiguous.
-- [ ] Remove consecutive duplicates.
-- [ ] Ensure ring closure.
-- [ ] Remove degenerate rings below the minimum vertex count.
-- [ ] Normalize winding order consistently.
-- [ ] Preserve holes and properties.
-- [ ] Record every transformation in a repair report.
-- [ ] Add unit tests for each transformation.
+- [x] Remove non-finite coordinates.
+- [x] Normalize longitude only where the intended behavior is unambiguous.
+- [x] Remove consecutive duplicates.
+- [x] Ensure ring closure.
+- [x] Remove degenerate rings below the minimum vertex count.
+- [x] Normalize winding order consistently.
+- [x] Preserve holes and properties.
+- [x] Record every transformation in a repair report.
+- [x] Add unit tests for each transformation.
 
 Do not yet attempt aggressive self-intersection repair or arbitrary polygon splitting unless diagnostics prove it is necessary.
 
 Exit criteria:
 
-- Dataset renders with no regression in feature count unless a skipped feature is explicitly reported.
-- Known artifact is re-tested.
-- Transformations are covered by tests.
+- Dataset renders with no regression in feature count unless a skipped feature is explicitly reported. (**Verified:** 440/440 features kept; `droppedFeatureCount: 0`.)
+- Known artifact is re-tested. (**Verified at pipeline level:** post-normalisation diagnostics show 440/440 clean, 0 warnings, 0 errors. The `winding-cw-outer: 794 → 0` collapse is the principal correlate eliminated. **Visual browser re-test pending CEO review** of `npm run preview`.)
+- Transformations are covered by tests. (**Verified:** 11 new normalize unit tests; 29 total tests pass.)
 
 ---
 

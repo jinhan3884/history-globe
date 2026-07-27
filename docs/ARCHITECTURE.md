@@ -158,3 +158,24 @@ src/geojson/
 `app.ts` runs `diagnoseFeatureCollection` against the loaded collection
 before `renderGeoJson`, and prints `formatDevSummary` to the console in
 dev only. No production output. No source-data mutation at any point.
+
+## Milestone 3 realized
+
+```
+src/geojson/
+  normalize.ts      pure copy-on-write normalizer -> NormalizeResult
+                    (collection + RepairReport)
+  report.ts         also produces RepairReport/Summary types + formatter
+```
+
+Pipeline ordering in `app.ts`:
+
+```
+load → diagnose (dev-only) → normalize → diagnose (dev-only) → render
+```
+
+Both diagnostic summaries and the repair summary are dev-bundle-only. The
+production bundle silently runs normalization (necessary for the renderer)
+but emits no console output. The input `FeatureCollection` is never
+mutated; Cesium receives a fresh copy with winding-correct rings and
+preserved properties.

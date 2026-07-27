@@ -130,3 +130,38 @@ known polygon artifact and the leading hypothesis for M3 normalization.
 `duplicate-point`, `lon-jump`, `winding-cw-outer`, `winding-ccw-hole`. The
 set is closed and stable; M3 normalizer will consume these exact codes to
 decide what to repair, and any new code added later requires a paired test.
+
+## D-023 — M3 normalizer is pure and copy-on-write
+
+**Decision:** `src/geojson/normalize.ts` produces a new
+`FeatureCollection` and a `RepairReport`. The input collection is never
+mutated, even for property objects; properties are shallow-copied onto the
+new feature objects. Cesium receives the normalized copy; the source
+dataset file is never written or copied back.
+
+## D-024 — Winding flip tolerance
+
+**Decision:** The normalizer's `signedArea === 0` short-circuit uses an
+_exact_ zero test, not a tolerance band. Several rings in the live dataset
+are self-intersecting with tiny-but-signed areas (e.g. `3.4e-10`); a coarse
+tolerance of `1e-9` skipped their winding flip in early M3 drafts and left
+348 `winding-cw-outer` warnings residual. Exact zero keeps the flip decision
+tied to the sign, which is what the diagnostic and renderer rely on. A
+geometric "is this ring degenerate?" test still uses `ring.length <
+MIN_RING_POINTS`.
+
+## D-025 — Repair action vocabulary
+
+**Decision:** Repair action codes are `removed-non-finite-coord`,
+`removed-duplicate-point`, `closed-ring`, `dropped-degenerate-ring`,
+`rewound-outer-ring`, `rewound-hole-ring`, `dropped-degenerate-polygon`,
+`dropped-feature-no-polygons`. Each is recorded with a coordinate-tree
+`path` so an audit can show "feature X coordinate Y was changed for reason
+Z". The set is closed for M3; new actions in M4 require paired tests.
+
+## D-026 — No longitude wrap in M3
+
+**Decision:** M3 does not remap longitudes like `190 → -170`. The live
+dataset has no out-of-range longitudes, so the action is not needed and the
+risk of an ambiguous remap is not justified. Antimeridian handling belongs
+to M4 if the artifact persists after winding normalization.

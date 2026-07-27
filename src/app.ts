@@ -5,7 +5,8 @@ import { renderGeoJson } from './cesium/renderGeoJson';
 import { installInteraction } from './cesium/interaction';
 import { GeoJsonLoadError, loadGeoJson } from './geojson/loadGeoJson';
 import { diagnoseFeatureCollection } from './geojson/diagnostics';
-import { formatDevSummary } from './geojson/report';
+import { normalizeFeatureCollection } from './geojson/normalize';
+import { formatDevSummary, formatDevRepairSummary } from './geojson/report';
 import { createLoading } from './ui/loading';
 import { createErrorPanel } from './ui/errorPanel';
 import { createTooltip } from './ui/tooltip';
@@ -80,17 +81,30 @@ async function loadDataset(
 ): Promise<void> {
   try {
     const result = await loadGeoJson(DATASET_PATH);
-    loading.setText(`Loaded ${result.featureCount} features, drawing…`);
+    loading.setText(`Loaded ${result.featureCount} features, normalising…`);
 
-    // Diagnostics run *before* render so the dev console shows what the
-    // renderer is about to see. We never mutate the data here; M2 is
-    // observation only. The summary print is dev-bundle-only per AGENTS.md.
+    // Diagnostics + normalisation both run in dev so the developer sees
+    // before/after summaries and the repair log. In production we still run
+    // normalisation (the renderer needs it to suppress the artifact) but
+    // skip the dev-only console.info blocks.
     if (import.meta.env.DEV) {
-      const report = diagnoseFeatureCollection(result.collection);
-      console.info(formatDevSummary(report.summary));
+      const preReport = diagnoseFeatureCollection(result.collection);
+      console.info(formatDevSummary(preReport.summary));
     }
 
-    const dataSource = await renderGeoJson(viewer, result.collection);
+    const normalized = normalizeFeatureCollection(result.collection);
+
+    if (import.meta.env.DEV) {
+      console.info(formatDevRepairSummary(normalized.report));
+      const postReport = diagnoseFeatureCollection(normalized.collection);
+      console.info('[history-atlas] post-normalisation diagnostics:');
+      console.info(formatDevSummary(postReport.summary));
+    }
+
+    loading.setText(
+      `Drawing ${normalized.collection.features.length} features…`,
+    );
+    const dataSource = await renderGeoJson(viewer, normalized.collection);
     loading.hide();
     await viewer.flyTo(dataSource);
   } catch (loadError) {

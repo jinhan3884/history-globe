@@ -264,3 +264,91 @@ each issue so M3 can act on exactly the same coordinate.
   verification, not a shipped command).
 - No public/exposed diagnostic UI; the summary is dev-bundle-only via
   `import.meta.env.DEV`.
+
+## Milestone 3 — Conservative geometry normalization (completed)
+
+Added a pure, copy-on-write normalizer
+(`src/geojson/normalize.ts`) between diagnostics and rendering. `app.ts`
+now runs: load → diagnose (dev-only console.info) → normalize → diagnose
+(dev-only console.info) → render. No Cesium-side change beyond receiving
+the normalized collection.
+
+### Transformations performed
+
+1. `removeNonFinite` — drop positions where lon/lat are non-finite
+2. `removeConsecutiveDuplicates` — drop a point equal to its predecessor
+3. `ensureClosed` — append first point as last if ring is open
+4. dropped-degenerate-ring — rings with fewer than 4 positions after 1–3
+5. `normalizeWinding` — outer → CCW, hole → CW (RFC 7946)
+6. dropped-degenerate-polygon / dropped-feature-no-polygons when no valid
+   rings remain; reported, never silent
+
+Source collection is never mutated. Properties are shallow-copied. Holes are
+preserved and rewound separately from the outer ring.
+
+### Repair report types
+
+Added `RepairAction`, `RepairEntry`, `FeatureRepairReport`, `RepairReport`,
+`summariseRepairs`, and `formatDevRepairSummary` in `src/geojson/report.ts`
+— parallel to the diagnostic-summary vocabulary established in M2.
+
+### Verification — all green
+
+- `npm run typecheck` — clean.
+- `npm run lint` — clean (two `unicorn/no-array-reverse` warnings
+  self-fixed by switching to `Array#toReversed`).
+- `npm run format:check` — all files conform.
+- `npm run test` — 4 files / 29 tests pass (11 new normalize tests +
+  12 diagnostics + 6 loader).
+- `npm run build` — succeeds.
+- `npm run preview` (port 4178): `/` 200, dataset 200 (1,761,405 bytes),
+  bundle 200.
+- Ran diagnostics + normalize on the live `world_100.geojson`:
+
+  ```
+  === BEFORE ===
+  features:       440, clean: 5, warnings: 435, errors: 0
+  winding-cw-outer: 794, winding-ccw-hole: 5, duplicate-point: 4
+
+  === REPAIRS ===
+  features dropped: 0
+  rewound-outer-ring:    794
+  rewound-hole-ring:       5
+  removed-duplicate-point: 4
+
+  === AFTER ===
+  features:       440, clean: 440, warnings: 0, errors: 0
+  ```
+
+### Diagnostic finding during M3
+
+A first implementation pass used `Math.abs(area) < 1e-9` to short-circuit
+the winding flip. Re-running post-normalisation diagnostics then showed
+348 residual `winding-cw-outer` warnings. Investigation revealed a class of
+self-intersecting rings with tiny-but-signed shoelace values on the order
+of 3.4e-10 — the coarse tolerance skipped their flip even though the sign
+was still meaningful. The short-circuit now uses an exact `area === 0`
+test (D-024). M4 owns the self-intersection problem itself; M3 only handles
+winding direction deterministically.
+
+### Residual risks carried forward
+
+- R9-M3: Self-intersecting rings (the sample at feature #1 in the dataset
+  walks outward then traces back across its own outline) are _not_ repaired
+  by M3. The signed-area sign is meaningless for them but
+  healing/removal is M4 scope. Today, those rings are still rewound on
+  the basis of sign so Cesium sees a deterministic winding; we have not
+  inspected the artifact visually.
+- R10-M3: The visual verification of artifact removal needs a human
+  browser smoke test of `npm run preview`. The pipeline-level diagnostic
+  collapse is strong evidence, not a visual proof.
+- R5-M1 (the artifact itself): the _correlate_ is eliminated; the _symptom_
+  is re-tested as part of M4.
+
+### What was deliberately NOT done
+
+- No self-intersection repair (M4).
+- No antimeridian split (M4).
+- No longitude remapping like 190 → -170 (D-026).
+- No offline dataset preprocessing or persisted repaired derivative.
+- No change to Cesium rendering API or styling.
