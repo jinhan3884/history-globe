@@ -1,39 +1,113 @@
-import { cesiumIonToken, hasCesiumIonToken } from './config';
+import * as Cesium from 'cesium';
+import { DATASET_PATH } from './config';
+import { createViewer } from './cesium/createViewer';
+import { renderGeoJson } from './cesium/renderGeoJson';
+import { installInteraction } from './cesium/interaction';
+import { GeoJsonLoadError, loadGeoJson } from './geojson/loadGeoJson';
+import { createLoading } from './ui/loading';
+import { createErrorPanel } from './ui/errorPanel';
+import { createTooltip } from './ui/tooltip';
+import { UNNAMED_LABEL } from './geojson/types';
 
 /**
- * Mounts the Milestone 0 loading shell into the #root element.
+ * Mount point #root hosts three children:
+ *   - the Cesium canvas (created by createViewer)
+ *   - the loading overlay (created by createLoading)
+ *   - the error overlay (created by createErrorPanel)
+ *   - the tooltip (created by createTooltip)
+ *   - a small attribution credit (created here)
  *
- * This milestone intentionally renders only a branded placeholder so we can
- * prove the toolchain (TypeScript, Vite, Cesium static-copy) is wired
- * correctly before introducing the Cesium viewer and dataset load in
- * Milestone 1.
- *
- * No Cesium is imported here. No token is read into Cesium yet. The token is
- * only surfaced to a visible dev-mode notice so a developer can confirm their
- * `.env` was picked up without inspecting network requests.
+ * Order matters for visual stacking: attribution is appended last so it is
+ * above the canvas but below the error overlay (the error overlay is itself
+ * appended after the tooltip, so it sits on the very top).
  */
 export function mountApp(root: HTMLElement): void {
-  root.innerHTML = `
-    <main class="shell">
-      <h1 class="brand">History Atlas</h1>
-      <p class="tagline">History has coordinates.</p>
-      <p class="status" data-role="loading">Loading…</p>
-      <p class="notice"></p>
-    </main>
-  `;
+  const loading = createLoading(root);
+  const errorPanel = createErrorPanel(root);
+  rendering(root, loading, errorPanel);
+}
 
-  const notice = root.querySelector<HTMLElement>('.notice');
-  if (notice) {
-    if (hasCesiumIonToken) {
-      notice.textContent = 'Cesium Ion token configured locally (dev only).';
-    } else {
-      notice.textContent =
-        'No Cesium Ion token configured. The globe will still render the ' +
-        'local dataset; Ion-hosted imagery is unavailable.';
-    }
+function rendering(
+  root: HTMLElement,
+  loading: ReturnType<typeof createLoading>,
+  errorPanel: ReturnType<typeof createErrorPanel>,
+): void {
+  let viewer: Cesium.Viewer;
+  try {
+    viewer = createViewer(root);
+  } catch (createError) {
+    loading.hide();
+    errorPanel.show(
+      'Could not start the 3D globe.',
+      describeError(createError),
+    );
+    return;
   }
 
-  // Touch the token value so the bundler keeps the import; this also makes
-  // the dev-mode absence obvious if someone inspects the module directly.
-  void cesiumIonToken;
+  const tooltip = createTooltip(root);
+  installInteraction(viewer, tooltip, {
+    onHoverName(name) {
+      // Hover name is surfaced via the tooltip element only in M1.
+      void name;
+    },
+    onClick(name) {
+      // Click selection is shown via the browser console in dev mode only;
+      // a proper side panel arrives in M5.
+      if (import.meta.env.DEV) {
+        if (name !== null) {
+          if (name === UNNAMED_LABEL) {
+            console.info('[history-atlas] clicked unnamed feature');
+          } else {
+            console.info(`[history-atlas] clicked feature: ${name}`);
+          }
+        }
+      }
+    },
+  });
+
+  mountAttribution(root);
+
+  loading.setText('Loading the historical globe…');
+  void loadDataset(viewer, loading, errorPanel);
+}
+
+async function loadDataset(
+  viewer: Cesium.Viewer,
+  loading: ReturnType<typeof createLoading>,
+  errorPanel: ReturnType<typeof createErrorPanel>,
+): Promise<void> {
+  try {
+    const result = await loadGeoJson(DATASET_PATH);
+    loading.setText(`Loaded ${result.featureCount} features, drawing…`);
+    const dataSource = await renderGeoJson(viewer, result.collection);
+    loading.hide();
+    await viewer.flyTo(dataSource);
+  } catch (loadError) {
+    loading.hide();
+    const message =
+      loadError instanceof GeoJsonLoadError
+        ? 'The historical dataset failed to load.'
+        : 'The globe failed to render the loaded dataset.';
+    errorPanel.show(message, describeError(loadError));
+  }
+}
+
+function mountAttribution(root: HTMLElement): void {
+  const credit = document.createElement('div');
+  credit.className = 'attribution';
+  credit.innerHTML = [
+    '<strong>History Atlas</strong> — History has coordinates.',
+    ' Historical basemap: world, 100 CE.',
+    ' Attribution and license details will appear here before public launch.',
+  ].join(' ');
+  root.append(credit);
+}
+
+function describeError(error: unknown): string {
+  if (error instanceof Error) {
+    return error.name === error.message
+      ? error.name
+      : `${error.name}: ${error.message}`;
+  }
+  return String(error);
 }

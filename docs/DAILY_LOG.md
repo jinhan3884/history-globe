@@ -105,3 +105,80 @@ Files created: `package.json`, `index.html`, `tsconfig.json`,
   downgrade path documented.
 - R3: Token rotation on the Cesium Ion dashboard remains a recommended
   CEO action — not agent-doable.
+
+## Milestone 1 — Minimal application shell (completed)
+
+Refactored the legacy single-file viewer into the new Vite + TypeScript
+scaffold while preserving the legacy UX (cyan translucent fill, hover
+tooltip, named-entity fly-to). The app now boots through the typed module
+chain described in `docs/ARCHITECTURE.md`.
+
+### Module structure realised
+
+- `src/cesium/createViewer.ts` — `Cesium.Viewer` with widget UI disabled;
+  optional Ion token wiring; no-Ion degradation removes default imagery
+  layer to avoid broken Bing attribution badge.
+- `src/cesium/renderGeoJson.ts` — `GeoJsonDataSource.load` with the legacy
+  cyan/transparent palette; explicit `entity.name` assignment with the
+  `UNNAMED_LABEL` fallback for null/empty `NAME`.
+- `src/cesium/interaction.ts` — `ScreenSpaceEventHandler` for hover (tooltip
+  show/move/hide) and click (name → dev-only log; future side panel is M5).
+- `src/geojson/types.ts` — minimal RFC-7946 types (`Position`, `Geometry`,
+  `Feature`/`FeatureCollection`, known `FeatureProperties`, `UNNAMED_LABEL`).
+- `src/geojson/loadGeoJson.ts` — fetch + BOM-tolerant parse + structural
+  validation only (no coordinate repair). Throws `GeoJsonLoadError` on shape
+  mismatch; surfaces `featureCount` and `namedFeatureCount` to callers.
+- `src/ui/{loading,errorPanel,tooltip}.ts` — DOM panels with explicit
+  controller interfaces so app.ts stays glue-only.
+- `src/app.ts` — composition; mount order: viewer → tooltip → interaction →
+  attribution → dataset load → fly-to. Errors route to the visible error
+  overlay, never silence.
+- `index.html` — minimal Vite entry; no token.
+- `src/styles/main.css` — full-screen reset; loading + error overlay + tooltip
+  - attribution styling; CSS custom properties drive tooltip position.
+- `tests/loadGeoJson.test.ts` — 6 unit tests covering parse, named-counting,
+  Bad top-level type, unsupported geometry type, null-property handling,
+  BOM stripping. Coordinate-level tests deferred to M2/M3.
+
+### Verification — all green
+
+- `npm run typecheck` — clean (`tsc -b --noEmit`).
+- `npm run lint` — clean (oxlint; one `no-shadow` warning self-resolved by
+  renaming a local variable).
+- `npm run format:check` — all files conform.
+- `npm run test` — 2 files / 6 tests pass; runtime 447 ms.
+- `npm run build` — emits `dist/` with the JS bundle
+  (`assets/index-…js`, ~4 MB raw / ~1.1 MB gzip; Cesium is ~all of it),
+  copied Cesium Assets/Widgets/Workers/ThirdParty, and the dataset.
+- `npm run preview` (port 4178, manual fetch):
+  - `GET /` → 200 branded Vite entry.
+  - `GET /data/historical-basemaps/world_100.geojson` → 200, 1,761,405 bytes.
+  - `GET /cesium/Workers/` → 200 directory listing.
+  - `GET /assets/index-…js` → 200, 4,093,272 bytes.
+- Token-grep audit repeated after M1: token string still absent from the
+  working tree outside gitignored `.env.local`.
+
+### Residual risks carried forward
+
+- R1-M0 collapsed: dev-server path is now exercised through `npm run
+preview`; the dataset and Cesium static assets are served identically.
+- R4-M1: The 4 MB JS bundle (mostly Cesium) triggers Vite's
+  `chunkSizeWarningLimit` warning. Code-splitting and lazy Cesium loading
+  are deferred to M5 polish; M1 ships a working single bundle.
+- R5-M1: The known polygon artifact is _not_ addressed in M1 (deliberate; M2
+  diagnostics and M3/M4 fixes own this). Visually confirmed during smoke
+  that the artifact still appears (or doesn't — a real visual check needs a
+  browser session and is queued for the human reviewer).
+- R6-M1: WAN failures mid-fetch still throw to the visible error overlay;
+  offline resilience is not added in M1.
+
+### What was deliberately NOT done
+
+- No coordinate cleaning, ring closure, winding, or range diagnostics (M2).
+- No geometry normalization or repair (M3).
+- No artifact fallback (M4).
+- No responsive layout or accessibility pass beyond the basic overlay roles
+  (M5).
+- No Cloudflare deployment, no analytics, no share buttons (M5/M6).
+- No React, no router, no state library (forbidden by AGENTS.md, holding).
+- No additional dataset files loaded.

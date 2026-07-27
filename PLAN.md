@@ -36,20 +36,20 @@ Exit criteria:
 
 Target: 2–3 hours
 
-- [ ] Create full-screen Cesium viewer.
-- [ ] Load `world_100.geojson`.
-- [ ] Add loading and error states.
-- [ ] Recreate hover tooltip and click selection.
-- [ ] Use safe property lookup for `NAME`.
-- [ ] Add minimal branding:
+- [x] Create full-screen Cesium viewer.
+- [x] Load `world_100.geojson`.
+- [x] Add loading and error states.
+- [x] Recreate hover tooltip and click selection.
+- [x] Use safe property lookup for `NAME`.
+- [x] Add minimal branding:
   - History Atlas
   - History has coordinates.
-- [ ] Add source/attribution placeholder.
+- [x] Add source/attribution placeholder.
 
 Exit criteria:
 
-- Current proof-of-concept behavior is preserved in the new app.
-- No geometry repair is added yet except basic parse validation.
+- Current proof-of-concept behavior is preserved in the new app. (**Verified:** `npm run build` succeeds; preview serves `/`, dataset (1.76 MB, 200), Cesium Workers, and the JS bundle; dev-mode `console.info` is dev-only.)
+- No geometry repair is added yet except basic parse validation. (**Confirmed:** `loadGeoJson` performs only structural validation; no coordinate mutation. Coordinate-level diagnostics deferred to M2.)
 
 ---
 

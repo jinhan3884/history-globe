@@ -83,3 +83,27 @@ recommended as good hygiene, but is a CEO action, not an agent action.
 environment for the generic GeoJSON layer (M2/M3); a `jsdom` environment will
 be added only if/when a UI test requires it. M0 ships one smoke test so the
 runner is wired and the `npm run test` command exits cleanly.
+
+## D-017 — Rendering API
+
+**Decision:** Use `Cesium.GeoJsonDataSource.load` for M1, exactly as the
+legacy viewer did, instead of building a custom polygon pipeline. The cyan
+translucent fill is preserved so M1 is a refactor of the same UX, not a
+reskin. A custom entity pipeline is reserved for M4's feature-specific
+fallback on the demonstrated artifact.
+
+## D-018 — Cesium viewer boot mode
+
+**Decision:** When no `VITE_CESIUM_ION_TOKEN` is configured, the app removes
+Cesium's default ImageryLayers so the globe does not display a broken Bing
+attribution badge. The local GeoJSON dataset renders identically with or
+without a token. Production builds will likely combine a public Ion token
+with Cesium World Imagery; M1 ships usable behaviour for both states.
+
+## D-019 — Null name fallback
+
+**Decision:** Features whose `NAME` is `null`, `undefined`, or empty string
+get the neutral label `Unknown / Unrecorded territory` stored on
+`entity.name`, so the viewer's tooltip side never draws empty text. The
+fallback string is exported once from `src/geojson/types.ts` so the value
+cannot drift between code paths.
