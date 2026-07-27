@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <title>History Globe - Step 9 (복구 및 개선)</title>
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.114/Build/Cesium/Cesium.js"></script>
+    <link href="https://cesium.com/downloads/cesiumjs/releases/1.114/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+    <style>
+        html, body, #cesiumContainer {
+            width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
+        }
+        #tooltip {
+            position: absolute; display: none; background-color: rgba(0, 0, 0, 0.8);
+            color: white; padding: 5px 10px; border-radius: 4px; font-size: 14px;
+            pointer-events: none; z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div id="cesiumContainer"></div>
+    <div id="tooltip"></div>
+    
+    <script>
+        // 1. Cesium Ion Access Token
+        // Token intentionally removed from source on Milestone 0 scrub.
+        // Do NOT reintroduce a hard-coded token. The new Vite app
+        // (`src/config.ts`) reads VITE_CESIUM_ION_TOKEN from the environment.
+        // Without a token, this legacy reference page still renders the local
+        // GeoJSON dataset; only Ion-hosted imagery/terrain degrade gracefully.
+        // (For a working reference of the original behavior, set the token in
+        // Cesium.Ion.defaultAccessToken at runtime before opening this page.)
+
+        // 2. Cesium Viewer 초기화 (구글 어스 실사 지도 복구 - imageryProvider 강제 설정 제거)
+        const viewer = new Cesium.Viewer('cesiumContainer', {
+            geocoder: false, homeButton: false, sceneModePicker: false,
+            baseLayerPicker: false, navigationHelpButton: false, 
+            animation: false, timeline: false, fullscreenButton: false    
+        });
+
+        const filePath = './data/historical-basemaps/world_100.geojson';
+
+        // 3. 데이터 세척 함수 
+        function cleanCoordinates(coords) {
+            if (!Array.isArray(coords)) return [];
+            if (typeof coords[0] === 'number') {
+                return (coords.length === 2 && !isNaN(coords[0]) && !isNaN(coords[1])) ? coords : [];
+            }
+            const cleaned = [];
+            for (let i = 0; i < coords.length; i++) {
+                const cleanedChild = cleanCoordinates(coords[i]);
+                if (cleanedChild.length > 0) {
+                    if (Array.isArray(cleanedChild[0])) {
+                        if (cleanedChild.length >= 3) {
+                            cleaned.push(cleanedChild);
+                        }
+                    } else {
+                        cleaned.push(cleanedChild);
+                    }
+                }
+            }
+            return cleaned;
+        }
+
+        // 4. 파일 불러오기 및 세척 후 Cesium에 적용
+        fetch(filePath)
+            .then(response => response.text())
+            .then(text => {
+                const cleanText = text.replace(/^\uFEFF/, '').trim();
+                const geoJsonData = JSON.parse(cleanText);
+
+                let validFeatureCount = 0;
+                if (geoJsonData.features) {
+                    geoJsonData.features = geoJsonData.features.filter(feature => {
+                        if (!feature.geometry || !feature.geometry.coordinates) return false;
+                        feature.geometry.coordinates = cleanCoordinates(feature.geometry.coordinates);
+                        if (feature.geometry.coordinates.length > 0) {
+                            validFeatureCount++;
+                            return true;
+                        }
+                        return false;
+                    });
+                }
+
+                console.log(`데이터 세척 완료! 유효한 국가 개수: ${validFeatureCount}개`);
+
+                return Cesium.GeoJsonDataSource.load(geoJsonData, {
+                    // ★ 원래 보셨던 반투명 청록색으로 복구 ★
+                    fill: Cesium.Color.CYAN.withAlpha(0.4), 
+                    // ★ 내부 선이 안 그려지도록 외곽선 설정 제거 ★
+                    stroke: Cesium.Color.TRANSPARENT,             
+                    strokeWidth: 0                          
+                });
+            })
+            .then(function(dataSource) {
+                viewer.dataSources.add(dataSource);
+                
+                // ★ 이름이 있는 문명만 정확히 추출하여 name 속성 부여 ★
+                const entities = dataSource.entities.values;
+                for (let i = 0; i < entities.length; i++) {
+                    let entity = entities[i];
+                    // NAME 속성이 존재하고, null이 아닌 경우에만 이름 할당
+                    if (entity.properties.NAME && entity.properties.NAME.getValue() !== null) {
+                        entity.name = entity.properties.NAME.getValue();
+                    } else {
+                        entity.name = "미지의 영토 / 기록 없음";
+                    }
+                }
+
+                viewer.flyTo(dataSource).then(function() {
+                    console.log("역사 국경선이 성공적으로 그려졌습니다!");
+                });
+            })
+            .catch(function(error) {
+                console.error("에러 발생:", error);
+            });
+
+        // 5. 마우스 호버 시 문명 이름 띄우기
+        const tooltip = document.getElementById('tooltip');
+        const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+        
+        handler.setInputAction(function(movement) {
+            const pickedObject = viewer.scene.pick(movement.endPosition);
+            
+            // 엔티티가 존재하고 name 속성이 있을 때만 툴팁 표시
+            if (Cesium.defined(pickedObject) && pickedObject.id && pickedObject.id.name) {
+                tooltip.style.display = 'block';
+                tooltip.style.left = movement.endPosition.x + 15 + 'px';
+                tooltip.style.top = movement.endPosition.y + 15 + 'px';
+                tooltip.innerHTML = pickedObject.id.name; // 할당된 이름 가져오기
+            } else {
+                tooltip.style.display = 'none';
+            }
+        }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+
+    </script>
+</body>
+</html>

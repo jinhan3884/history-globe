@@ -1,32 +1,49 @@
-# React + TypeScript + Vite
+# History Atlas — Project Alexandria
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+> **History has coordinates.**
 
-Currently, two official plugins are available:
+Project Alexandria is the internal codename for **History Atlas**, a historical platform that organizes human history across **time, space, and relationships**.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Public domain: `historyatlas.net`
+- First application: History Globe
+- Core long-term asset: History Data Hub
+- Initial go-to-market user: history YouTubers and other history creators
+- Platform identity: a history platform for everyone
 
-## React Compiler
+## Current state
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+The repository begins with an existing Cesium proof of concept:
 
-## Expanding the Oxlint configuration
+- `legacy/index.html`
+- `data/historical-basemaps/world_100.geojson`
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+The legacy viewer already loads a 440-feature `MultiPolygon` GeoJSON and displays hover names. It also exhibits occasional polygon triangulation artifacts. The first development task is to turn this proof of concept into a small, deployable MVP without overengineering.
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
-```
+## MVP principle
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+**Think in decades. Build in days.**
+
+The first public release should let a visitor:
+
+1. Open a historical globe.
+2. See one historical world dataset.
+3. Hover or click an area and see its name.
+4. Share the page.
+5. Use it reliably on desktop and mobile.
+
+Timeline switching, downloads, creator exports, AI, API, and the full Data Hub come after launch unless a minimal version is needed for the first release.
+
+## Start with OpenCode
+
+1. Open a terminal in this repository.
+2. Start OpenCode.
+3. Read `AGENTS.md`, `PLAN.md`, and `docs/MVP_SPEC.md`.
+4. Switch to **Plan** agent and paste the prompt in `OPENCODE_START_PROMPT.md`.
+5. Review the proposed plan.
+6. Switch to **Build** agent only after the plan is approved.
+7. Execute one milestone at a time.
+8. After every milestone, update `PLAN.md`, `docs/DECISION_LOG.md`, and `docs/DAILY_LOG.md`.
+
+## Important
+
+Do not rewrite everything at once. Preserve the working proof of concept until the replacement passes smoke tests.
