@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 
@@ -17,6 +18,16 @@ const DATA_STRIP_BASE = 2;
 export default defineConfig({
   define: {
     CESIUM_BASE_URL: JSON.stringify(CESIUM_BASE_URL),
+  },
+  resolve: {
+    alias: {
+      // Cesium 1.114's KML data sources import `@zip.js/zip.js/lib/zip-no-worker.js`,
+      // a subpath that newer `@zip.js/zip.js` versions no longer export. We do not
+      // use KML export in the MVP, so stub the import with an empty module.
+      '@zip.js/zip.js/lib/zip-no-worker.js': fileURLToPath(
+        new URL('./shims/zip-no-worker.js', import.meta.url),
+      ),
+    },
   },
   plugins: [
     viteStaticCopy({

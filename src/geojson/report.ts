@@ -131,6 +131,7 @@ export function formatDevSummary(summary: DiagnosticsSummary): string {
  */
 export type RepairAction =
   | 'removed-non-finite-coord'
+  | 'clamped-polar-latitude'
   | 'removed-duplicate-point'
   | 'closed-ring'
   | 'dropped-degenerate-ring'

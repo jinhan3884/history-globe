@@ -352,3 +352,85 @@ winding direction deterministically.
 - No longitude remapping like 190 → -170 (D-026).
 - No offline dataset preprocessing or persisted repaired derivative.
 - No change to Cesium rendering API or styling.
+
+## Re-execution day (2026-08-23) — M0 re-verified + render-crash remediation
+
+CEO instruction: ignore all prior in-progress work and re-run the
+OPENCODE_START_PROMPT workflow, overwriting as needed.
+
+### State found
+
+- Commits M0–M3 present; working tree carried uncommitted changes: Cesium
+  pinned 1.143 → 1.114.0, a `@zip.js/zip.js` subpath shim in
+  `vite.config.ts`, a partial `normalize.ts` degenerate-ring fix,
+  and four `temp_*.json` experiment outputs.
+
+### Bootstrap re-verification (M0 scope)
+
+- Secrets audit: tracked files contain no token; the only lockfile hit for
+  the JWT pattern is a base64 integrity hash substring (false positive).
+- `.gitignore`, `.env.example`, scripts, toolchain verified intact.
+- README gained a "Local development" quickstart section.
+- Removed debris: `temp_norm_*.json`, `temp_orig_feature1.json`.
+- Kept after verification: Cesium 1.114.0 pin + zip shim (necessary — the
+  subpath is blocked by zip.js's exports map) and the normalize.ts work
+  (extended below). CEO business documents (`*.docx`, `*.xlsx`) untouched.
+
+### Browser smoke test found a hard crash
+
+`npm run dev` + headless Chromium: the render loop stopped with
+`RangeError: Failed to set the 'length' property on 'Array': Invalid array
+length`. Stack captured via the Cesium error panel:
+`subdivideRhumbLine` inside the `createPolygonOutlineGeometry` worker.
+
+Root cause chain, reproduced in Node against Cesium's own source modules:
+
+1. Ring segments touching latitude ±90° make `EllipsoidRhumbLine` undefined;
+   surface distance is NaN → `positions.length = NaN * 3` throws. The raw
+   dataset has 363 polar vertices across 63 features (mostly Antarctica's
+   boundary closed along −90°).
+2. Separately, 66 normalized rings had exactly 3 distinct points and zero
+   floating-point area (collinear specks ≤ 9.09e-13); these pass any
+   distinct-point count but are geometrically empty.
+
+Fixes (see D-027, D-028):
+
+- `clampPolarVertices` clamps ±90° to ±(90 − 1e-6), reported per vertex as
+  `clamped-polar-latitude`.
+- Rings with |shoelace| < 2e-12 are dropped as degenerate (replacing the
+  distinct-point rule); 23 features consisting only of such specks are
+  dropped **with report** (417 of 440 kept).
+- `src/main.ts` now imports Cesium `widgets.css` (D-029) — without it the
+  viewer collapsed to a 300×150 corner canvas.
+
+### Verification — all green
+
+- `npm run typecheck`, `npm run lint`, `npm run format:check` — clean.
+- `npm run test` — 4 files / 33 tests pass (4 new: collinear drop, tiny real
+  island kept, full-feature drop reported, polar clamp).
+- Node segment scan over the full normalized dataset using Cesium's own
+  `EllipsoidRhumbLine`: 0 non-finite subdivision segments remain.
+- `npm run build` — succeeds (benign shim warnings only).
+- Dev server + headless Chromium: globe renders full-screen, no error panel;
+  hover tooltip verified ("Khoiasan", computed display block/visible).
+- Production preview (port 4173): same result; hover works.
+- Token-less rebuild (`.env.local` moved aside): globe renders with solid
+  base color, polygons + tooltip still work. Bundle scan: the only JWT is
+  Cesium's own public library default token, byte-identical to
+  `node_modules/@cesium/engine/Source/Core/Ion.js`; our secret is absent.
+
+### Residual risks
+
+- R11: 23 dropped features are reported in dev console only; production has
+  no visible indicator (acceptable until M5 polish).
+- R12: visual artifact status (triangles) not yet systematically diffed
+  against legacy; Antarctica now renders cleanly at the pole, which was the
+  largest suspected artifact source.
+- R13: Ion token rotation still pending (CEO action, unchanged).
+
+### What was deliberately NOT done
+
+- No self-intersection repair or antimeridian split (M4).
+- No production-visible repair reporting (M5).
+- No deployment config (M6).
+- No dataset file edits; normalization stays copy-on-write at runtime.

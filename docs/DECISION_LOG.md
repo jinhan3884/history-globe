@@ -165,3 +165,58 @@ Z". The set is closed for M3; new actions in M4 require paired tests.
 dataset has no out-of-range longitudes, so the action is not needed and the
 risk of an ambiguous remap is not justified. Antimeridian handling belongs
 to M4 if the artifact persists after winding normalization.
+
+## D-027 — Polar-latitude clamp in the normalizer
+
+**Decision:** Vertices at exactly ±90° latitude are clamped to
+±(90° − 1e-6) during normalization, each clamp recorded as a
+`clamped-polar-latitude` repair entry. Root cause: Cesium's
+`EllipsoidRhumbLine` (used by polygon _outline_ geometry workers) is
+undefined for pole-touching segments — heading/distance become NaN and
+`positions.length = NaN * 3` throws
+`RangeError: Failed to set the 'length' property on 'Array'`, killing the
+whole render loop. The clamp moves vertices ≈11 cm; visually invisible.
+In `world_100.geojson` the only surviving polar ring is the Antarctica
+boundary (raw data has 363 polar vertices in 63 features; the rest live in
+rings already dropped as degenerate slivers).
+
+## D-028 — Zero-area ring drop threshold
+
+**Decision:** Rings whose |shoelace sum| < 2e-12 after dedup+closure are
+dropped and reported as `dropped-degenerate-ring`. This subsumes the
+fewer-than-3-distinct-points rule. Measured on the live dataset: degenerate
+rings have |sum| ≤ 9.09e-13 (floating-point noise from collinear specks);
+the smallest genuine ring is 7.28e-12 — the threshold sits inside that gap.
+Consequence: 23 features whose every polygon is a polar/collinear speck are
+now dropped **with a report** (was 440 kept / 0 dropped under the M3
+criteria; now 417 kept / 23 dropped, all reported).
+
+## D-029 — Cesium widgets.css must be imported by the app
+
+**Decision:** `src/main.ts` imports
+`cesium/Build/Cesium/Widgets/widgets.css`. The legacy page linked it via
+`<link>`; the Vite port had dropped it, collapsing the viewer to the
+canvas' intrinsic 300×150 instead of filling the viewport. Found during the
+browser smoke test (globe rendered tiny in the corner).
+
+## D-030 — Cesium pinned to 1.114.0 with a zip.js shim
+
+**Decision:** `cesium` is pinned to `1.114.0` (the exact version the legacy
+CDN viewer used) so rendering behavior stays comparable while the artifact
+investigation is open. Cesium 1.114's `@cesium/engine@7.0.0` statically
+imports `@zip.js/zip.js/lib/zip-no-worker.js`, a subpath that zip.js 2.8.34's
+`exports` map no longer exposes; `vite.config.ts` aliases it to a one-line
+empty-module shim (`shims/zip-no-worker.js`). KML import/export is not used
+by the MVP, so the stub is inert. The build emits benign
+`IMPORT_IS_UNDEFINED` rollup warnings for this stub — accepted noise, not
+suppressed.
+
+## D-031 — Milestone 0 re-execution policy
+
+**Decision:** Per CEO instruction, the milestone workflow was re-run from
+scratch ignoring prior uncommitted work-in-progress; bootstrap files were
+verified (not trusted) and debris (`temp_*.json` experiment outputs)
+removed. Verified fixes from the interrupted session (Cesium pin + shim,
+degenerate-ring work) were kept only after independent verification:
+typecheck, 33 unit tests, production build, and browser smoke tests of dev,
+preview, and token-less builds.

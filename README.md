@@ -19,6 +19,25 @@ The repository begins with an existing Cesium proof of concept:
 
 The legacy viewer already loads a 440-feature `MultiPolygon` GeoJSON and displays hover names. It also exhibits occasional polygon triangulation artifacts. The first development task is to turn this proof of concept into a small, deployable MVP without overengineering.
 
+## Local development
+
+Requirements: Node.js 20+ and npm.
+
+```bash
+npm install
+npm run dev        # dev server with HMR
+npm run build      # typecheck + production build into dist/
+npm run preview    # serve the production build locally
+npm run test       # unit tests (vitest)
+npm run typecheck  # tsc project references
+npm run format     # prettier
+npm run lint       # oxlint
+```
+
+Cesium Ion is optional. Without a token the app renders with a non-Ion base
+imagery layer. To use Ion imagery, copy `.env.example` to `.env.local` and set
+`VITE_CESIUM_ION_TOKEN`. `.env.local` is gitignored; never commit a real token.
+
 ## MVP principle
 
 **Think in decades. Build in days.**

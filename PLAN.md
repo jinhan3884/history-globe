@@ -30,6 +30,13 @@ Exit criteria:
 - No credential is required in committed code. (**Verified:** token string absent from the entire working tree outside the gitignored `.env.local`; not present in any prior commit blob reachable from all refs.)
 - Baseline screenshot or written smoke-test record exists. (**Written record:** see `docs/DAILY_LOG.md` — Milestone 0 entry.)
 
+**Re-executed 2026-08-23** per CEO instruction (prior in-progress work
+ignored, overwrite as needed): bootstrap files independently re-verified;
+README local-dev quickstart added; experiment debris removed; Cesium pinned
+to the legacy version 1.114.0 with a zip.js shim; browser smoke tests of
+dev, preview and token-less builds all pass. See DAILY_LOG re-execution day
+entry and D-031.
+
 ---
 
 ## Milestone 1 — Minimal application shell
@@ -96,9 +103,9 @@ Do not yet attempt aggressive self-intersection repair or arbitrary polygon spli
 
 Exit criteria:
 
-- Dataset renders with no regression in feature count unless a skipped feature is explicitly reported. (**Verified:** 440/440 features kept; `droppedFeatureCount: 0`.)
-- Known artifact is re-tested. (**Verified at pipeline level:** post-normalisation diagnostics show 440/440 clean, 0 warnings, 0 errors. The `winding-cw-outer: 794 → 0` collapse is the principal correlate eliminated. **Visual browser re-test pending CEO review** of `npm run preview`.)
-- Transformations are covered by tests. (**Verified:** 11 new normalize unit tests; 29 total tests pass.)
+- Dataset renders with no regression in feature count unless a skipped feature is explicitly reported. (**Re-verified 2026-08-23:** after the zero-area/polar degeneracy rules, 417/440 features kept; 23 features consisting solely of collinear or polar sliver rings dropped — every drop reported in the repair report.)
+- Known artifact is re-tested. (**Verified at pipeline level:** post-normalisation diagnostics clean; `winding-cw-outer: 794 → 0`. **Visually verified 2026-08-23:** headless-browser smoke test — globe renders full-screen with no render-loop crash and a clean Antarctica.)
+- Transformations are covered by tests. (**Verified:** 33 total tests pass, incl. zero-area ring drop, tiny-real-island keep, reported full-feature drop, polar clamp.)
 
 ---
 
@@ -108,19 +115,19 @@ Target: 3–5 hours
 
 Only if Milestone 3 does not remove the artifact:
 
-- [ ] Identify the offending feature and polygon/ring.
-- [ ] Test hypotheses separately:
-  - dateline crossing,
-  - winding/hole classification,
+- [x] Identify the offending feature and polygon/ring.
+- [x] Test hypotheses separately:
+  - dateline crossing, — absent from dataset (M2)
+  - winding/hole classification, — normalized in M3
   - self-intersection,
   - disconnected parts encoded in one ring,
-  - Cesium triangulation limitation.
-- [ ] Select the least destructive fallback:
+  - Cesium triangulation limitation. — **confirmed 2026-08-23**: polar-touching segments crash `EllipsoidRhumbLine` in outline workers; zero-area rings crash triangulation.
+- [~] Select the least destructive fallback:
   1. render offending feature as split entities,
   2. use a trusted geometry library for that class of error,
-  3. skip only the irreparable polygon part and report it,
+  3. skip only the irreparable polygon part and report it, — **done for degenerate slivers and pole vertices** (23 features dropped with report; pole vertices clamped)
   4. pre-process the source dataset offline.
-- [ ] Document why the fallback is safe.
+- [x] Document why the fallback is safe. (D-027, D-028: clamp ≈11 cm; threshold inside the measured noise/genuine-area gap.)
 - [ ] Save a repaired derivative with provenance if offline preprocessing is used.
 
 Exit criteria:

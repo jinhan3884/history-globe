@@ -120,6 +120,90 @@ describe('normalize', () => {
     expect(r.collection.features).toHaveLength(0);
   });
 
+  it('drops a collinear ring that encloses no surface', () => {
+    const r = normalizeFeatureCollection(
+      fc(
+        poly([
+          [
+            [0, 0],
+            [1, 1],
+            [2, 2],
+            [0, 0],
+          ],
+        ]),
+      ),
+    );
+    expect(codes(r)).toContain('dropped-degenerate-ring');
+    expect(r.collection.features).toHaveLength(0);
+  });
+
+  it('keeps a tiny but genuine island ring above the area threshold', () => {
+    // Triangle with shoelace area 4.5e-12 deg² — far below any visible
+    // feature yet well above the MIN_RING_AREA threshold.
+    const r = normalizeFeatureCollection(
+      fc(
+        poly([
+          [
+            [10, 10],
+            [10.000003, 10],
+            [10, 10.000003],
+            [10, 10],
+          ],
+        ]),
+      ),
+    );
+    expect(r.collection.features).toHaveLength(1);
+    expect(codes(r)).not.toContain('dropped-degenerate-ring');
+  });
+
+  it('reports (never silently drops) a feature whose every ring is degenerate', () => {
+    const r = normalizeFeatureCollection(
+      fc(
+        poly(
+          [
+            [
+              [0, 0],
+              [1, 1],
+              [2, 2],
+              [0, 0],
+            ],
+          ],
+          { NAME: 'Sliver' },
+        ),
+      ),
+    );
+    expect(codes(r)).toContain('dropped-feature-no-polygons');
+    expect(r.report.droppedFeatureCount).toBe(1);
+    const dropped = r.report.features[0];
+    expect(dropped?.kept).toBe(false);
+    expect(dropped?.displayName).toBe('Sliver');
+  });
+
+  it('clamps pole vertices so Cesium rhumb subdivision stays finite', () => {
+    // A ring running along lat -90 makes EllipsoidRhumbLine undefined
+    // (NaN distance -> worker RangeError). Vertices must be clamped inward
+    // and every clamp reported.
+    const r = normalizeFeatureCollection(
+      fc(
+        poly([
+          [
+            [-180, -89],
+            [-179.2, -90],
+            [-178, -89],
+            [-180, -89],
+          ],
+        ]),
+      ),
+    );
+    expect(codes(r)).toContain('clamped-polar-latitude');
+    const feature = r.collection.features[0];
+    expect(feature).toBeDefined();
+    const ring = feature!.geometry.coordinates[0] as Position[];
+    for (const p of ring) {
+      expect(Math.abs(p[1])).toBeLessThanOrEqual(90);
+    }
+  });
+
   it('rewinds a CW outer ring to CCW', () => {
     const r = normalizeFeatureCollection(
       fc(

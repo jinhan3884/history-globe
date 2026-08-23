@@ -29,6 +29,24 @@ import { summariseRepairs } from './report';
 
 const MIN_RING_POINTS = 4; // 3 distinct + closure
 const CLOSURE_TOLERANCE = 1e-9;
+/**
+ * Latitudes are clamped to ±(90° − this epsilon). A vertex exactly at a
+ * pole makes Cesium's `EllipsoidRhumbLine` undefined (heading/distance NaN),
+ * which crashes outline geometry workers with
+ * `RangeError: Failed to set the 'length' property on 'Array'`. The clamp is
+ * ≈11 cm on the WGS84 ellipsoid — visually invisible, geometrically safe.
+ */
+const MAX_ABS_LATITUDE = 90 - 1e-6;
+/**
+ * Minimum absolute shoelace area (square degrees) a closed ring must enclose
+ * to be renderable. Rings below this threshold are collinear slivers or
+ * floating-point noise (measured on world_100.geojson: degenerate rings have
+ * |area| <= 9.1e-13 while the smallest genuine ring is 7.3e-12). Cesium's
+ * `GeoJsonDataSource` triangulator throws
+ * `RangeError: Failed to set the 'length' property on 'Array'` when it is
+ * fed such a zero-surface ring, so we drop and report them.
+ */
+const MIN_RING_AREA = 2e-12;
 
 export interface NormalizeResult {
   collection: FeatureCollection;
@@ -82,16 +100,32 @@ function normalizeFeature(feature: Feature, index: number): NormalizedFeature {
       let working = ring.map(copyPosition);
 
       working = removeNonFinite(working, ringPath, entries);
+      working = clampPolarVertices(working, ringPath, entries);
       working = removeConsecutiveDuplicates(working, ringPath, entries);
       working = ensureClosed(working, ringId, entries);
 
+      // Drop the ring if it has fewer than 4 stored positions (3 distinct +
+      // closure). Cesium needs at least three distinct points.
       if (working.length < MIN_RING_POINTS) {
         entries.push({
           code: 'dropped-degenerate-ring',
           path: ringId,
-          detail: `had ${working.length} positions after normalisation; minimum is ${MIN_RING_POINTS}.`,
+          detail: `had ${working.length} positions after dedup+closure; minimum is ${MIN_RING_POINTS}.`,
         });
-        return; // drop this ring
+        return;
+      }
+
+      // Drop rings that enclose no surface (collinear slivers, numerical
+      // noise). This subsumes the fewer-than-3-distinct-points case, since
+      // any ring with < 3 distinct points has zero shoelace area.
+      const ringArea = Math.abs(signedArea(working));
+      if (ringArea < MIN_RING_AREA) {
+        entries.push({
+          code: 'dropped-degenerate-ring',
+          path: ringId,
+          detail: `encloses no surface after dedup+closure (|signed area| ${ringArea.toExponential(2)} < ${MIN_RING_AREA}); ring is degenerate.`,
+        });
+        return;
       }
 
       working = normalizeWinding(working, isOuter, ringId, entries);
@@ -161,6 +195,32 @@ function normalizeFeature(feature: Feature, index: number): NormalizedFeature {
 function resolveDisplayName(feature: Feature): string {
   const name = feature.properties.NAME;
   return typeof name === 'string' && name.length > 0 ? name : UNNAMED_LABEL;
+}
+
+/**
+ * Clamp any latitude at or beyond ±90° to ±MAX_ABS_LATITUDE. Cesium's
+ * `EllipsoidRhumbLine` (used by polygon outline geometry) is undefined for
+ * pole vertices and yields NaN distances that crash the geometry workers.
+ * Every clamp is recorded as a `clamped-polar-latitude` repair entry.
+ */
+function clampPolarVertices(
+  ring: Position[],
+  ringPath: (i: number) => string,
+  entries: RepairEntry[],
+): Position[] {
+  let clamped = false;
+  const out = ring.map((p, i): Position => {
+    if (Math.abs(p[1]) <= MAX_ABS_LATITUDE) return p;
+    clamped = true;
+    const lat = p[1] > 0 ? MAX_ABS_LATITUDE : -MAX_ABS_LATITUDE;
+    entries.push({
+      code: 'clamped-polar-latitude',
+      path: ringPath(i),
+      detail: `latitude ${p[1]} clamped to ${lat}; rhumb subdivision is undefined for pole vertices.`,
+    });
+    return [p[0], lat];
+  });
+  return clamped ? out : ring;
 }
 
 function copyPosition(p: Position): Position {
