@@ -243,3 +243,22 @@ by app code, dead-code-eliminated in production. Purpose: deterministic
 camera positioning for browser smoke tests. Note: the browser tool's
 `page.evaluate` runs in an isolated world — main-world globals must be
 reached via injected `<script>` tags writing results to DOM attributes.
+
+## D-034 — Retracing rings are healed, not dropped
+
+**Decision:** `healSelfTouchingRing` excises the zero-surface loop at every
+vertex self-touch and keeps the larger loop (`removed-retracing-loop`).
+Measured on the live dataset all 296 touches decompose into one real loop
+plus one ~zero-area spur, so no genuine territory is lost. Rings reduced
+below the minimum point count fall through to the existing reported drop.
+
+## D-035 — Long segments are subdivided to <= 2 deg
+
+**Decision:** `subdivideLongSegments` inserts linearly interpolated
+vertices so no ring segment exceeds 2 deg (`subdivided-long-segment`).
+Root cause of the CEO-reported Central Asia wedge (feature f406, Eurasia
+polygon): Cesium interpolates long edges along geodesics before
+triangulating; with 10-15 deg segments the interpolated 3D boundary
+self-overlaps and double-covers a lens region (brighter translucent fill).
+Linear interpolation at <= 2 deg deviates < ~0.5 km from the geodesic —
+below the dataset's own precision. Verified in-browser: wedge eliminated.

@@ -502,3 +502,20 @@ repair).
   tab pauses the render loop — test-harness note, not a product bug).
 - Remaining for launch (CEO): Ion token rotation + Pages env var, domain
   attach + HTTPS, license confirmation, analytics provider decision.
+
+## M4 fix day (2026-08-23) — wedge artifact eliminated
+
+CEO screenshot showed a huge bright lens across Central Asia. Isolation
+path: single-coverage confirmed (only f406 covers the region), no
+self-touches remain, no proper crossings — cause is Cesium's geodesic
+interpolation of f406's 10-15 deg border segments self-overlapping in 3D.
+
+Fixes (commit 5043f4a):
+- healSelfTouchingRing: excise zero-surface loop at each of the 296 vertex
+  self-touches, keep the real loop (D-034)
+- subdivideLongSegments: cap segments at 2 deg (D-035)
+
+Verified: 37 tests, typecheck/lint/format/build green; dev-server browser
+screenshots before/after at lon 75 lat 45 — wedge eliminated, fill uniform.
+Remaining: a few faint 1-2px streaks elsewhere (much reduced; separate
+follow-up if the CEO flags them).
