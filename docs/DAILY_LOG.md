@@ -528,3 +528,18 @@ rings (near-zero enclosed area, huge bounding boxes) that pass the
 absolute-area threshold. Added shape-based test (area/bbox-area < 1e-4,
 D-036): 363 rings dropped, 728 -> 365. Browser verification at lon 95
 lat 62: blades gone, per-territory colors and borders clean.
+
+## Near-touch blade fix (2026-08-23) — commit fe6790b
+
+CEO follow-up: thin blades remained after the needle drop. Cause: rings
+whose boundary runs out and returns within ~0.05 deg of itself (no vertex
+coincidence) — e.g. Roman Empire Balkan polygon (Adriatic blade, close
+approach 0.053 deg) and an Alaska north-coast blade (0.0000 deg).
+
+- findSelfTouch now returns the closest non-adjacent vertex pair
+- healSelfTouchingRing excises the spur under guards (extent >= 1 deg,
+  area <= 10% of kept loop) so small islands and figure-eight territories
+  are untouched (D-037)
+- tests: near-touch heal + two guard cases (46 pass)
+- browser verified: Siberia and Europe views clean; the Adriatic blade is
+  reduced to the Roman Empire's genuine thin coastal strip

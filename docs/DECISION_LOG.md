@@ -272,3 +272,16 @@ paths keep the "larger" loop, which is still a needle (e.g. bbox
 11.8x0.9 deg with area 1.16e-8 deg²) rendering as a long bright blade.
 Measured gap in the live dataset: 363 rings below 1e-4, next ring at
 ~6e-3 — the threshold sits inside a 60x gap. 728 -> 365 rings.
+
+## D-037 — Near-touching blade spurs are healed with guards
+
+**Decision:** `findSelfTouch` now returns the closest non-adjacent vertex
+pair (previously only exact/near-exact coincident vertices). Rings whose
+boundary comes back within 0.15 deg (~17 km) of itself across a spur are
+healed by excising the smaller-area loop — but only when the excised loop
+(a) extends at least 1 deg and (b) is at most 10% of the kept loop's area.
+The guards protect small islands (vertices naturally close at the ring's
+own scale) and genuine figure-eight territories with two comparable lobes.
+Live dataset: catches the Roman Empire Adriatic blade (0.053 deg close
+approach) and an Alaska north-coast blade, while 300+ small-island rings
+are untouched.
