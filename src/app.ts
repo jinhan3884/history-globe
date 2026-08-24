@@ -6,6 +6,7 @@ import { installInteraction } from './cesium/interaction';
 import { GeoJsonLoadError, loadGeoJson } from './geojson/loadGeoJson';
 import { diagnoseFeatureCollection } from './geojson/diagnostics';
 import { normalizeFeatureCollection } from './geojson/normalize';
+import { trimThinOverlaps } from './geojson/trimOverlaps';
 import { formatDevSummary, formatDevRepairSummary } from './geojson/report';
 import { createLoading } from './ui/loading';
 import { createErrorPanel } from './ui/errorPanel';
@@ -95,6 +96,13 @@ async function loadDataset(
     }
 
     const normalized = normalizeFeatureCollection(result.collection);
+    const trimmed = trimThinOverlaps(normalized.collection);
+    normalized.collection = trimmed.collection;
+    if (import.meta.env.DEV && trimmed.entries.length > 0) {
+      console.info(
+        `[history-atlas] trimmed ${trimmed.entries.length} thin overlaps`,
+      );
+    }
 
     if (import.meta.env.DEV) {
       console.info(formatDevRepairSummary(normalized.report));

@@ -135,6 +135,8 @@ export type RepairAction =
   | 'removed-duplicate-point'
   | 'removed-retracing-loop'
   | 'subdivided-long-segment'
+  | 'trimmed-thin-overlap'
+  | 'overlap-trim-failed'
   | 'closed-ring'
   | 'dropped-degenerate-ring'
   | 'dropped-needle-ring'

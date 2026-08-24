@@ -16,7 +16,8 @@
     "lint": "oxlint ."
   },
   "dependencies": {
-    "cesium": "1.114.0"
+    "cesium": "1.114.0",
+    "polygon-clipping": "^0.15.7"
   },
   "devDependencies": {
     "@types/cesium": "^1.67.14",
