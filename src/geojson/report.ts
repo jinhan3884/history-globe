@@ -140,6 +140,7 @@ export type RepairAction =
   | 'closed-ring'
   | 'dropped-degenerate-ring'
   | 'dropped-needle-ring'
+  | 'trimmed-antarctic-excursion'
   | 'rewound-outer-ring'
   | 'rewound-hole-ring'
   | 'dropped-degenerate-polygon'

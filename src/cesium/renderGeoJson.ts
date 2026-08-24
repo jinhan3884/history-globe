@@ -41,7 +41,7 @@ export async function renderGeoJson(
     if (entity.polygon) {
       const hue = nameHue(name);
       entity.polygon.material = new Cesium.ColorMaterialProperty(
-        Cesium.Color.fromHsl(hue, 0.48, 0.55, 1.0),  // opaque = no overlap blades
+        Cesium.Color.fromHsl(hue, 0.48, 0.55, 1.0), // opaque = no overlap blades
       );
       entity.polygon.outline = new Cesium.ConstantProperty(true);
       entity.polygon.outlineColor = new Cesium.ConstantProperty(

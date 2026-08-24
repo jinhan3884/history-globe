@@ -133,6 +133,12 @@ const MIN_RING_AREA = 2e-12;
  */
 const MIN_RING_FILL_RATIO = 1e-4;
 
+/**
+ * Rings that dip below this latitude have their Antarctic excursion trimmed.
+ * A straight chord at LAT cap replaces the portion south of this parallel.
+ */
+const MAX_SOUTH_LAT = -60;
+
 export interface NormalizeResult {
   collection: FeatureCollection;
   report: RepairReport;
@@ -240,6 +246,7 @@ function normalizeFeature(feature: Feature, index: number): NormalizedFeature {
 
       working = normalizeWinding(working, isOuter, ringId, entries);
       working = subdivideLongSegments(working, ringId, entries);
+      working = trimAntarcticExcursion(working, ringId, entries);
       ringsOut.push(working);
     });
 
@@ -506,6 +513,62 @@ function signedArea(ring: Position[]): number {
     sum += (b[0] - a[0]) * (b[1] + a[1]);
   }
   return sum;
+}
+
+/**
+ * Clip the portion of a closed ring that lies south of `MAX_SOUTH_LAT`
+ * (-60 deg). Rings of South American/Patagonian territories include vertices
+ * in the Southern Ocean whose geodesic arcs cut across Antarctica on the
+ * globe, rendering as broad crescent fills over the continent. This step
+ * removes the Antarctic protrusion and replaces it with a boundary along
+ * the latitude cap.
+ */
+function trimAntarcticExcursion(
+  ring: Position[],
+  ringId: string,
+  entries: RepairEntry[],
+): Position[] {
+  // Only clip rings that CROSS the boundary (not entirely Antarctic features).
+  let crossCount = 0;
+  for (let i = 0; i < ring.length - 1; i++) {
+    const a = ring[i]!,
+      b = ring[i + 1]!;
+    if (a[1]! >= MAX_SOUTH_LAT !== b[1]! >= MAX_SOUTH_LAT) crossCount++;
+  }
+  if (crossCount < 2) return ring; // entirely north or south, or single crossing (degenerate)
+  let clipped = false;
+  const out: Position[] = [];
+  for (let i = 0; i < ring.length - 1; i++) {
+    const a = ring[i]!;
+    const b = ring[i + 1]!;
+    const inA = a[1]! >= MAX_SOUTH_LAT;
+    const inB = b[1]! >= MAX_SOUTH_LAT;
+    if (inA && inB) {
+      out.push(a);
+    } // both north — keep
+    else if (!inA && !inB) {
+      clipped = true;
+    } // both south — skip
+    else if (inA && !inB) {
+      out.push(a);
+      const t = (MAX_SOUTH_LAT - a[1]!) / (b[1]! - a[1]!);
+      out.push([a[0]! + (b[0]! - a[0]!) * t, MAX_SOUTH_LAT]);
+      clipped = true;
+    } else {
+      const t = (MAX_SOUTH_LAT - a[1]!) / (b[1]! - a[1]!);
+      out.push([a[0]! + (b[0]! - a[0]!) * t, MAX_SOUTH_LAT]);
+      clipped = true;
+    }
+  }
+  if (!clipped) return ring;
+  // Close the ring.
+  if (out.length > 0) out.push([out[0]![0]!, out[0]![1]!]);
+  entries.push({
+    code: 'trimmed-antarctic-excursion' as never,
+    path: ringId,
+    detail: `clipped ${ring.length - 1}pts → ${out.length - 1}pts; section south of ${MAX_SOUTH_LAT} deg removed.`,
+  });
+  return out;
 }
 
 function normalizeWinding(

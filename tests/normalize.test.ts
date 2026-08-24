@@ -546,3 +546,49 @@ it('leaves a figure-eight with two comparable lobes untouched', () => {
   expect(codes(r)).not.toContain('removed-retracing-loop');
   expect(codes(r)).not.toContain('dropped-needle-ring');
 });
+
+it('clips the Antarctic excursion from a ring that dips south of -60 and returns', () => {
+  // Ring: north, south (into Antarctica), north, crossing -60 line twice.
+  const r = normalizeFeatureCollection(
+    fc(
+      poly([
+        [
+          [0, -50],
+          [30, -50],
+          [30, -70],
+          [20, -65],
+          [10, -50],
+          [0, -50],
+        ],
+      ]),
+    ),
+  );
+  const codes_ = codes(r);
+  expect(codes_).toContain(
+    'trimmed-antarctic-excursion' as 'dropped-needle-ring',
+  );
+  expect(r.collection.features).toHaveLength(1);
+  const ring = r.collection.features[0]!.geometry.coordinates[0] as Position[];
+  // All remaining vertices should be >= -60
+  expect(ring.every((p) => p[1]! >= -60)).toBe(true);
+});
+
+it('leaves an entirely Antarctic ring untouched', () => {
+  const r = normalizeFeatureCollection(
+    fc(
+      poly([
+        [
+          [0, -70],
+          [10, -70],
+          [10, -75],
+          [0, -75],
+          [0, -70],
+        ],
+      ]),
+    ),
+  );
+  expect(codes(r)).not.toContain(
+    'trimmed-antarctic-excursion' as 'dropped-needle-ring',
+  );
+  expect(r.collection.features).toHaveLength(1);
+});
