@@ -511,6 +511,7 @@ self-touches remain, no proper crossings — cause is Cesium's geodesic
 interpolation of f406's 10-15 deg border segments self-overlapping in 3D.
 
 Fixes (commit 5043f4a):
+
 - healSelfTouchingRing: excise zero-surface loop at each of the 296 vertex
   self-touches, keep the real loop (D-034)
 - subdivideLongSegments: cap segments at 2 deg (D-035)
