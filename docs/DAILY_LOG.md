@@ -520,3 +520,11 @@ Verified: 37 tests, typecheck/lint/format/build green; dev-server browser
 screenshots before/after at lon 75 lat 45 — wedge eliminated, fill uniform.
 Remaining: a few faint 1-2px streaks elsewhere (much reduced; separate
 follow-up if the CEO flags them).
+
+## Needle fix (2026-08-23) — commit 062b8bc
+
+CEO follow-up: blades remained after the wedge fix. Diagnosis: needle
+rings (near-zero enclosed area, huge bounding boxes) that pass the
+absolute-area threshold. Added shape-based test (area/bbox-area < 1e-4,
+D-036): 363 rings dropped, 728 -> 365. Browser verification at lon 95
+lat 62: blades gone, per-territory colors and borders clean.

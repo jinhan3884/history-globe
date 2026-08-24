@@ -262,3 +262,13 @@ triangulating; with 10-15 deg segments the interpolated 3D boundary
 self-overlaps and double-covers a lens region (brighter translucent fill).
 Linear interpolation at <= 2 deg deviates < ~0.5 km from the geodesic —
 below the dataset's own precision. Verified in-browser: wedge eliminated.
+
+## D-036 — Needle rings are detected by shape, not absolute area
+
+**Decision:** Rings whose enclosed area is < 1e-4 of their lon/lat
+bounding-box area are dropped as needles (`dropped-needle-ring`). The
+absolute-area threshold (D-028) cannot catch them: healed out-and-back
+paths keep the "larger" loop, which is still a needle (e.g. bbox
+11.8x0.9 deg with area 1.16e-8 deg²) rendering as a long bright blade.
+Measured gap in the live dataset: 363 rings below 1e-4, next ring at
+~6e-3 — the threshold sits inside a 60x gap. 728 -> 365 rings.
