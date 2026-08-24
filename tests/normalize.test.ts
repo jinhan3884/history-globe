@@ -470,3 +470,79 @@ it('keeps a genuinely compact ring that fills its bbox', () => {
   expect(codes(r)).not.toContain('dropped-needle-ring');
   expect(r.collection.features).toHaveLength(1);
 });
+
+it('heals a far-reaching near-touching blade spur', () => {
+  // Main body (0,0)-(30,30) with a thin blade spur from (15,30) out to
+  // (16,40) and back to (15.04,30) — vertices 0.04 deg apart at the mouth.
+  const r = normalizeFeatureCollection(
+    fc(
+      poly([
+        [
+          [0, 0],
+          [30, 0],
+          [30, 30],
+          [15, 30],
+          [16, 40],
+          [15.04, 30],
+          [0, 30],
+          [0, 0],
+        ],
+      ]),
+    ),
+  );
+  expect(codes(r)).toContain('removed-retracing-loop');
+  expect(r.collection.features).toHaveLength(1);
+  const ring = r.collection.features[0]!.geometry.coordinates[0] as Position[];
+  // Spur apex (16,40) excised.
+  expect(ring.every((p) => p[1]! <= 30.5)).toBe(true);
+  // Ring still closed.
+  expect(ring[0]).toEqual(ring[ring.length - 1]);
+});
+
+it('leaves small islands with naturally close vertices untouched', () => {
+  // A tiny island: all vertices are close; the close approach is the
+  // ring's own scale, not a blade.
+  const r = normalizeFeatureCollection(
+    fc(
+      poly([
+        [
+          [0, 0],
+          [0.1, 0.05],
+          [0.2, 0.1],
+          [0.15, 0.12],
+          [0.05, 0.04],
+          [0, 0],
+        ],
+      ]),
+    ),
+  );
+  expect(r.collection.features).toHaveLength(1);
+  const ring = r.collection.features[0]!.geometry.coordinates[0] as Position[];
+  expect(ring.length).toBe(6);
+});
+
+it('leaves a figure-eight with two comparable lobes untouched', () => {
+  // Two ~real lobes joined by a 0.07-deg near touch: excising either lobe
+  // would destroy real territory, so the ring is left alone.
+  const r = normalizeFeatureCollection(
+    fc(
+      poly([
+        [
+          [0, 0],
+          [10, 0],
+          [10, 10],
+          [0, 10],
+          [0.05, 0.05],
+          [-5, 0.05],
+          [-5, -5],
+          [0.05, -5],
+          [0.049, 0.049],
+        ],
+      ]),
+    ),
+  );
+  expect(r.collection.features).toHaveLength(1);
+  // Both lobes survive (subdivision may add vertices along long edges).
+  expect(codes(r)).not.toContain('removed-retracing-loop');
+  expect(codes(r)).not.toContain('dropped-needle-ring');
+});

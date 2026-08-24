@@ -46,6 +46,21 @@ const MAX_ABS_LATITUDE = 90 - 1e-6;
  */
 const SELF_TOUCH_TOLERANCE = 1e-7;
 
+/**
+ * Non-adjacent vertices closer than this (≈17 km) across a far-reaching
+ * spur mark a "near-touching" blade: the boundary runs out and comes back
+ * almost onto itself. Guarded excision (see healSelfTouchingRing) removes
+ * the spur; small islands whose vertices are naturally close are protected
+ * by the extent and area-ratio guards.
+ */
+const NEAR_TOUCH_TOLERANCE = 0.15;
+
+/** A spur must reach at least this far (≈111 km) to be excised. */
+const MIN_SPUR_EXTENT_DEG = 1.0;
+
+/** A spur larger than this fraction of the kept loop is left alone. */
+const MAX_SPUR_AREA_FRACTION = 0.1;
+
 /** Bounded re-scan passes for `healSelfTouchingRing`. */
 const MAX_HEAL_PASSES = 16;
 
@@ -335,12 +350,12 @@ function healSelfTouchingRing(
 ): Position[] {
   let working = ring;
   for (let pass = 0; pass < MAX_HEAL_PASSES; pass++) {
-    const touch = findSelfTouch(working);
-    if (!touch) return working;
-    const [i, j] = touch;
+    const found = findSelfTouch(working);
+    if (!found) return working;
+    const [i, j, dist] = found;
     const n = working.length - 1; // closed: last == first
     // Loop A: ring[i..j]; Loop B: ring[j..n-1] + ring[0..i]. Both are closed
-    // by the shared touched vertex.
+    // by the shared (or nearly shared) touched vertex.
     const loopA = working.slice(i, j + 1);
     const loopB = working.slice(j, n).concat(working.slice(0, i + 1));
     const areaA = Math.abs(signedArea(loopA));
@@ -358,10 +373,32 @@ function healSelfTouchingRing(
         keep = keep.slice(0, -1);
       }
     }
+    const excisedArea = Math.min(areaA, areaB);
+    const keptArea = Math.max(areaA, areaB);
+    if (dist > SELF_TOUCH_TOLERANCE) {
+      // Near touch (not an exact retracing vertex). Only excise far-reaching
+      // thin spurs: a close approach inside a small ring is that ring's own
+      // scale (a tiny island), and two comparable lobes may be a genuine
+      // figure-eight. Leaving them untouched is the conservative choice.
+      let exMinX = Infinity;
+      let exMaxX = -Infinity;
+      let exMinY = Infinity;
+      let exMaxY = -Infinity;
+      const excised = areaA >= areaB ? loopB : loopA;
+      for (const p of excised) {
+        exMinX = Math.min(exMinX, p[0]!);
+        exMaxX = Math.max(exMaxX, p[0]!);
+        exMinY = Math.min(exMinY, p[1]!);
+        exMaxY = Math.max(exMaxY, p[1]!);
+      }
+      const extent = Math.hypot(exMaxX - exMinX, exMaxY - exMinY);
+      if (extent < MIN_SPUR_EXTENT_DEG) return working;
+      if (excisedArea > MAX_SPUR_AREA_FRACTION * keptArea) return working;
+    }
     entries.push({
       code: 'removed-retracing-loop',
       path: ringId,
-      detail: `self-touch at point[${i}] == point[${j}]: excised zero-surface loop (|area| ${Math.min(areaA, areaB).toExponential(2)} deg²), kept ${keep.length}-point loop.`,
+      detail: `self-touch at point[${i}] ~= point[${j}] (dist ${dist.toExponential(2)} deg): excised zero-surface loop (|area| ${excisedArea.toExponential(2)} deg²), kept ${keep.length}-point loop.`,
     });
     if (keep.length + 1 < MIN_RING_POINTS) return keep; // downstream drops it
     working = [...keep, copyPosition(keep[0]!)];
@@ -369,24 +406,26 @@ function healSelfTouchingRing(
   return working;
 }
 
-/** First (i, j) with i + 2 <= j < n-1 whose endpoints coincide. */
-function findSelfTouch(ring: Position[]): [number, number] | null {
+/**
+ * Closest non-adjacent vertex pair in a closed ring, or null when every
+ * such pair is at least NEAR_TOUCH_TOLERANCE apart.
+ */
+function findSelfTouch(ring: Position[]): [number, number, number] | null {
   const n = ring.length - 1; // closed: last == first
   if (n < 4) return null;
+  let best: [number, number, number] | null = null;
   for (let i = 0; i < n; i++) {
     const a = ring[i]!;
     for (let j = i + 2; j < n; j++) {
       if (i === 0 && j === n - 1) continue; // shared closure vertex
       const b = ring[j]!;
-      if (
-        Math.abs(a[0] - b[0]) <= SELF_TOUCH_TOLERANCE &&
-        Math.abs(a[1] - b[1]) <= SELF_TOUCH_TOLERANCE
-      ) {
-        return [i, j];
+      const d = Math.hypot(a[0] - b[0], a[1] - b[1]);
+      if (d < (best ? best[2] : NEAR_TOUCH_TOLERANCE)) {
+        best = [i, j, d];
       }
     }
   }
-  return null;
+  return best;
 }
 
 function copyPosition(p: Position): Position {
