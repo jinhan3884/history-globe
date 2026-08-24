@@ -152,15 +152,15 @@ Exit criteria:
 
 Target: 3–4 hours
 
-- [ ] Responsive desktop/mobile layout.
-- [ ] Accessible tooltip or selection panel.
-- [ ] Loading indicator.
-- [ ] Friendly error message.
-- [ ] Basic “About / Data source” panel.
-- [ ] Social sharing metadata.
-- [ ] Favicon and minimal visual identity.
-- [ ] Confirm page title and description.
-- [ ] Add privacy-friendly analytics placeholder, disabled by default.
+- [x] Responsive desktop/mobile layout. (<=640px media query; verified 375x667)
+- [x] Accessible tooltip or selection panel. (role=tooltip + aria-live=polite)
+- [x] Loading indicator. (M1)
+- [x] Friendly error message. (M1)
+- [x] Basic “About / Data source” panel. (About button + panel; license line pending CEO confirmation)
+- [x] Social sharing metadata. (OG + twitter:card)
+- [x] Favicon and minimal visual identity. (public/favicon.svg)
+- [x] Confirm page title and description. (index.html)
+- [x] Add privacy-friendly analytics placeholder, disabled by default. (VITE_ANALYTICS_ID flag, no provider wired)
 
 Exit criteria:
 
@@ -173,13 +173,13 @@ Exit criteria:
 
 Target: 2–3 hours
 
-- [ ] Production build succeeds.
-- [ ] Add Cloudflare Pages deployment instructions.
-- [ ] Configure `historyatlas.net`.
-- [ ] Verify HTTPS.
-- [ ] Verify asset paths and GeoJSON caching.
-- [ ] Run desktop/mobile smoke tests.
-- [ ] Record release as `v0.1.0`.
+- [x] Production build succeeds.
+- [x] Add Cloudflare Pages deployment instructions. (docs/DEPLOYMENT.md)
+- [ ] Configure `historyatlas.net`. (CEO action: DNS + Pages custom domain)
+- [ ] Verify HTTPS. (follows domain attach)
+- [x] Verify asset paths and GeoJSON caching. (public/_headers: /cesium/* immutable, /data/* 1h; all endpoints 200)
+- [x] Run desktop/mobile smoke tests. (production preview, 1440x900 + 375x667)
+- [x] Record release as `v0.1.0`.
 
 Exit criteria:
 

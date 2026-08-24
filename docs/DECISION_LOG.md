@@ -224,7 +224,7 @@ preview, and token-less builds.
 ## D-032 — Self-intersection diagnostic scope
 
 **Decision:** `checkSelfIntersection` in `src/geojson/diagnostics.ts` flags
-only *proper* segment crossings (strict orientation test, shared endpoints
+only _proper_ segment crossings (strict orientation test, shared endpoints
 and collinear touches ignored). Result on the live dataset: **0 proper
 crossings** — so the classic bowtie hypothesis is dead. The actual artifact
 class is **self-touching retracing rings**: 297 of 741 rings revisit one of

@@ -469,3 +469,36 @@ M4 stops here per plan: repair strategy for the 297 retracing rings needs
 CEO review — (a) split into simple parts, (b) drop with report, (c) offline
 preprocessing. M5/M6 continue after the choice (they are independent of the
 repair).
+
+## M5+M6 day (2026-08-23) — polish and deployment configuration
+
+### M5 (commit f3ded47)
+
+- Responsive: <=640px media query (tooltip wrap/12px, attribution wrap/10px,
+  overlay padding). Verified at 1440x900 and 375x667.
+- Tooltip a11y: aria-live=polite added (role=tooltip already present).
+- About panel (src/ui/aboutPanel.ts): brand + tagline + dataset line
+  (CC-BY 4.0 / aourednik historical-basemaps — pending CEO confirmation);
+  attribution bar now reads "Data source and license: see About."
+- index.html: og:title/description/url/type, twitter:card, SVG favicon
+  (public/favicon.svg).
+- Analytics placeholder: VITE_ANALYTICS_ID in config.ts + .env.example; no
+  provider wired (D-031 follow-up).
+- Fixed a self-inflicted regression found in smoke testing: attribution
+  element had vanished (className line lost during an edit) — restored and
+  re-verified on both viewports.
+- oxlint: allow __historyAtlasViewer dangle prefix. All checks green
+  (typecheck/lint/format/35 tests/build).
+
+### M6
+
+- docs/DEPLOYMENT.md: Cloudflare Pages build settings, env var handling,
+  custom domain steps, rollback, CEO pre-launch checklist.
+- public/_headers: /cesium/* immutable (1y), /data/* 1h.
+- Production smoke: /, /favicon.svg, /_headers, dataset, workers all 200;
+  no VITE_ var names in bundle; only JWT is Cesium's public library default
+  (byte-identical to node_modules source); tooltip works on the production
+  build ("Khoiasan"); mobile resize verified after bringToFront (background
+  tab pauses the render loop — test-harness note, not a product bug).
+- Remaining for launch (CEO): Ion token rotation + Pages env var, domain
+  attach + HTTPS, license confirmation, analytics provider decision.
