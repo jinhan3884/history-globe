@@ -130,7 +130,9 @@ body,
    bottom-right by default). */
 .attribution {
   position: absolute;
-  bottom: 6px;
+  /* Cesium's own credit bar (.cesium-viewer-bottom) occupies the bottom
+     ~32px; sit above it so the two never overlap. */
+  bottom: 40px;
   left: 10px;
   padding: 0.3rem 0.6rem;
   background: rgba(11, 16, 32, 0.55);
