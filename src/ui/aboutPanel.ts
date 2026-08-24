@@ -32,7 +32,7 @@ export function createAboutPanel(root: HTMLElement): AboutPanelController {
 
   const source = document.createElement('p');
   source.textContent =
-    'Data: historical basemaps, world in 100 CE (CC-BY 4.0, ' +
+    'Data: historical-basemaps, world in 100 CE (GPL-3.0, ' +
     'github.com/aourednik/historical-basemaps). Boundaries are ' +
     'approximations of the period, not legal claims.';
   panel.append(source);
