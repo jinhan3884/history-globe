@@ -247,6 +247,7 @@ function normalizeFeature(feature: Feature, index: number): NormalizedFeature {
       working = normalizeWinding(working, isOuter, ringId, entries);
       working = subdivideLongSegments(working, ringId, entries);
       working = trimAntarcticExcursion(working, ringId, entries);
+      working = dropContinentScaleAntarctica(working, ringId, entries);
       ringsOut.push(working);
     });
 
@@ -569,6 +570,44 @@ function trimAntarcticExcursion(
     detail: `clipped ${ring.length - 1}pts → ${out.length - 1}pts; section south of ${MAX_SOUTH_LAT} deg removed.`,
   });
   return out;
+}
+
+/**
+ * Drop rings that are entirely south of `MAX_SOUTH_LAT` and span more than
+ * `MAX_ANTARCTIC_EXTENT_DEG` — they are continent-scale Antarctic outline
+ * rings (e.g. f63, which wraps the globe at ~-63 to -90 deg, 1016 pts).
+ * Small Antarctic islets (bbox < 10 deg) are kept.
+ */
+function dropContinentScaleAntarctica(
+  ring: Position[],
+  ringId: string,
+  entries: RepairEntry[],
+): Position[] {
+  let maxLat = -Infinity;
+  for (const p of ring) if (p[1]! > maxLat) maxLat = p[1]!;
+  if (maxLat >= MAX_SOUTH_LAT) return ring; // not entirely south
+
+  let minX = Infinity,
+    maxX = -Infinity,
+    minY = Infinity,
+    maxY = -Infinity;
+  for (const p of ring) {
+    if (p[0]! < minX) minX = p[0]!;
+    if (p[0]! > maxX) maxX = p[0]!;
+    if (p[1]! < minY) minY = p[1]!;
+    if (p[1]! > maxY) maxY = p[1]!;
+  }
+  const diag = Math.hypot(maxX - minX, maxY - minY);
+  if (diag >= 10) {
+    entries.push({
+      code: 'dropped-antarctic-ring' as never,
+      path: ringId,
+      detail: `entire ring south of ${MAX_SOUTH_LAT} deg with extent ${diag.toFixed(1)} deg — continent-scale Antarctic outline.`,
+    });
+    // Return a degenerate ring that downstream checks will drop.
+    return [];
+  }
+  return ring;
 }
 
 function normalizeWinding(

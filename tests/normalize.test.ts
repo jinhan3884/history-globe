@@ -579,8 +579,8 @@ it('leaves an entirely Antarctic ring untouched', () => {
       poly([
         [
           [0, -70],
-          [10, -70],
-          [10, -75],
+          [2, -70],
+          [2, -75],
           [0, -75],
           [0, -70],
         ],
