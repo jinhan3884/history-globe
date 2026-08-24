@@ -137,6 +137,7 @@ export type RepairAction =
   | 'subdivided-long-segment'
   | 'closed-ring'
   | 'dropped-degenerate-ring'
+  | 'dropped-needle-ring'
   | 'rewound-outer-ring'
   | 'rewound-hole-ring'
   | 'dropped-degenerate-polygon'

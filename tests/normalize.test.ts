@@ -433,3 +433,40 @@ describe('normalize', () => {
     expect(r.report.droppedFeatureCount).toBe(0);
   });
 });
+
+it('drops needle rings (long out-and-back paths with vanishing area)', () => {
+  // A 20-deg-long diagonal needle: bbox ~20x10, enclosed area ~0.005 deg².
+  const r = normalizeFeatureCollection(
+    fc(
+      poly([
+        [
+          [0, 0],
+          [20, 10],
+          [20, 10.0002],
+          [0, 0.0002],
+          [0, 0],
+        ],
+      ]),
+    ),
+  );
+  expect(codes(r)).toContain('dropped-needle-ring');
+  expect(r.collection.features).toHaveLength(0);
+});
+
+it('keeps a genuinely compact ring that fills its bbox', () => {
+  const r = normalizeFeatureCollection(
+    fc(
+      poly([
+        [
+          [0, 0],
+          [10, 0],
+          [10, 10],
+          [0, 10],
+          [0, 0],
+        ],
+      ]),
+    ),
+  );
+  expect(codes(r)).not.toContain('dropped-needle-ring');
+  expect(r.collection.features).toHaveLength(1);
+});

@@ -108,6 +108,16 @@ function subdivideLongSegments(
  */
 const MIN_RING_AREA = 2e-12;
 
+/**
+ * Minimum ring area as a fraction of the ring's lon/lat bounding-box area.
+ * Rings below this ratio are "needles": paths that run out and back with a
+ * negligible enclosed surface (measured on world_100.geojson — 363 rings
+ * sit below 1e-4 with a 100x gap up to the next ring at ~1e-2). Cesium
+ * renders such rings as long bright blade artifacts. Axis-aligned thin
+ * rectangles that genuinely fill their bbox are unaffected (ratio ~1).
+ */
+const MIN_RING_FILL_RATIO = 1e-4;
+
 export interface NormalizeResult {
   collection: FeatureCollection;
   report: RepairReport;
@@ -185,6 +195,30 @@ function normalizeFeature(feature: Feature, index: number): NormalizedFeature {
           code: 'dropped-degenerate-ring',
           path: ringId,
           detail: `encloses no surface after dedup+closure (|signed area| ${ringArea.toExponential(2)} < ${MIN_RING_AREA}); ring is degenerate.`,
+        });
+        return;
+      }
+
+      // Needle test: a ring whose area is a vanishing fraction of its
+      // bounding box is an out-and-back path, not a territory. Rendered,
+      // such rings produce long bright blade artifacts.
+      let minX = Infinity;
+      let maxX = -Infinity;
+      let minY = Infinity;
+      let maxY = -Infinity;
+      for (const p of working) {
+        minX = Math.min(minX, p[0]!);
+        maxX = Math.max(maxX, p[0]!);
+        minY = Math.min(minY, p[1]!);
+        maxY = Math.max(maxY, p[1]!);
+      }
+      const bboxArea = (maxX - minX) * (maxY - minY);
+      const fillRatio = bboxArea > 0 ? ringArea / bboxArea : 0;
+      if (fillRatio < MIN_RING_FILL_RATIO) {
+        entries.push({
+          code: 'dropped-needle-ring',
+          path: ringId,
+          detail: `area is ${fillRatio.toExponential(2)} of the bounding box (bbox ${(maxX - minX).toFixed(1)}x${(maxY - minY).toFixed(1)} deg, area ${ringArea.toExponential(2)} deg² < ${MIN_RING_FILL_RATIO}); ring is a needle.`,
         });
         return;
       }
