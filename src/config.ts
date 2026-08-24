@@ -27,3 +27,10 @@ export const hasCesiumIonToken: boolean = cesiumIonToken.length > 0;
  */
 export const DATASET_PATH: string =
   '/data/historical-basemaps/world_100.geojson' as const;
+
+/**
+ * Privacy-friendly analytics placeholder. Empty by default: no analytics
+ * script is loaded unless a future milestone wires a provider behind this
+ * flag. Set `VITE_ANALYTICS_ID` to enable once a provider is chosen.
+ */
+export const analyticsId: string = import.meta.env.VITE_ANALYTICS_ID ?? '';

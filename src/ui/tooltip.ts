@@ -14,6 +14,7 @@ export function createTooltip(root: HTMLElement): TooltipController {
   const el = document.createElement('div');
   el.className = 'tooltip';
   el.setAttribute('role', 'tooltip');
+  el.setAttribute('aria-live', 'polite');
   el.hidden = true;
   root.append(el);
 

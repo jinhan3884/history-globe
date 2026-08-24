@@ -10,6 +10,7 @@ import { formatDevSummary, formatDevRepairSummary } from './geojson/report';
 import { createLoading } from './ui/loading';
 import { createErrorPanel } from './ui/errorPanel';
 import { createTooltip } from './ui/tooltip';
+import { createAboutPanel } from './ui/aboutPanel';
 import { UNNAMED_LABEL } from './geojson/types';
 
 /**
@@ -27,6 +28,7 @@ import { UNNAMED_LABEL } from './geojson/types';
 export function mountApp(root: HTMLElement): void {
   const loading = createLoading(root);
   const errorPanel = createErrorPanel(root);
+  createAboutPanel(root);
   rendering(root, loading, errorPanel);
 }
 
@@ -123,7 +125,7 @@ function mountAttribution(root: HTMLElement): void {
   credit.innerHTML = [
     '<strong>History Atlas</strong> — History has coordinates.',
     ' Historical basemap: world, 100 CE.',
-    ' Attribution and license details will appear here before public launch.',
+    ' Data source and license: see About.',
   ].join(' ');
   root.append(credit);
 }

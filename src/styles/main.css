@@ -141,3 +141,73 @@ body,
   z-index: 15;
   max-width: calc(100% - 200px);
 }
+
+/* Small screens: tighten overlays and let the attribution wrap. */
+@media (max-width: 640px) {
+  .tooltip {
+    max-width: 240px;
+    font-size: 12px;
+    white-space: normal;
+  }
+
+  .attribution {
+    max-width: calc(100vw - 20px);
+    font-size: 10px;
+  }
+
+  .loading,
+  .error-card {
+    padding-inline: 1rem;
+    max-width: 92vw;
+  }
+}
+
+/* About / data-source panel */
+.about-button {
+  position: absolute;
+  bottom: 6px;
+  right: 10px;
+  padding: 0.25rem 0.6rem;
+  background: rgba(11, 16, 32, 0.55);
+  color: #e6edf3;
+  border: 1px solid rgba(230, 237, 243, 0.25);
+  border-radius: 5px;
+  font-size: 11px;
+  cursor: pointer;
+  z-index: 20;
+}
+
+.about-button:hover {
+  background: rgba(230, 237, 243, 0.12);
+}
+
+.about-panel {
+  position: absolute;
+  bottom: 34px;
+  right: 10px;
+  width: min(320px, calc(100vw - 20px));
+  padding: 0.9rem 1rem;
+  background: rgba(11, 16, 32, 0.92);
+  border: 1px solid rgba(230, 237, 243, 0.2);
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 1.5;
+  z-index: 20;
+}
+
+.about-panel h2 {
+  margin: 0 0 0.4rem;
+  font-size: 13px;
+}
+
+.about-panel p {
+  margin: 0.35rem 0;
+}
+
+.about-panel a {
+  color: #7fd4d0;
+}
+
+.about-panel[hidden] {
+  display: none;
+}

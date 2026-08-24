@@ -6,7 +6,11 @@
     "perf": "warn"
   },
   "rules": {
-    "no-console": "off"
+    "no-console": "off",
+    "no-underscore-dangle": [
+      "warn",
+      { "allow": ["__historyAtlasViewer", "__probeMarker"] }
+    ]
   },
   "ignorePatterns": ["dist/", "node_modules/", "legacy/", "coverage/", "*.md"]
 }
