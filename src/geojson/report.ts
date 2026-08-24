@@ -133,6 +133,8 @@ export type RepairAction =
   | 'removed-non-finite-coord'
   | 'clamped-polar-latitude'
   | 'removed-duplicate-point'
+  | 'removed-retracing-loop'
+  | 'subdivided-long-segment'
   | 'closed-ring'
   | 'dropped-degenerate-ring'
   | 'rewound-outer-ring'

@@ -100,7 +100,7 @@ describe('normalize', () => {
     expect(feature).toBeDefined();
     const rings = (feature!.geometry.coordinates as Position[][]) ?? [];
     const ring = rings[0] ?? [];
-    expect(ring.length).toBe(4);
+    expect(ring.length).toBeGreaterThanOrEqual(4);
     expect(ring[0]).toEqual(ring[ring.length - 1]);
   });
 
@@ -202,6 +202,58 @@ describe('normalize', () => {
     for (const p of ring) {
       expect(Math.abs(p[1])).toBeLessThanOrEqual(90);
     }
+  });
+
+  it('heals an out-and-back spike ring (keeps the real loop)', () => {
+    // A(0,0) B(10,0) C(10,10) D(5,5) B'(10,0) A: the D->B'->A path is a
+    // zero-area spur; the B->C->D->B loop holds all the surface.
+    const r = normalizeFeatureCollection(
+      fc(
+        poly([
+          [
+            [0, 0],
+            [10, 0],
+            [10, 10],
+            [5, 5],
+            [10, 0],
+            [0, 0],
+          ],
+        ]),
+      ),
+    );
+    expect(codes(r)).toContain('removed-retracing-loop');
+    expect(r.collection.features).toHaveLength(1);
+    const ring = r.collection.features[0]!.geometry
+      .coordinates[0] as Position[];
+    expect(ring.length).toBeGreaterThanOrEqual(4); // triangle + closure (+ subdivision)
+  });
+
+  it('excises a mid-ring retracing spike (keeps the surrounding polygon)', () => {
+    // Touch at (10,10): indices 2 and 4. The 2->3->4 sub-loop is a thin
+    // zero-area spike; the rest is a real quadrilateral.
+    const r = normalizeFeatureCollection(
+      fc(
+        poly([
+          [
+            [0, 0],
+            [0, 10],
+            [10, 10],
+            [5, 5],
+            [10, 10.00000005],
+            [10, 0],
+            [0, 0],
+          ],
+        ]),
+      ),
+    );
+    expect(codes(r)).toContain('removed-retracing-loop');
+    expect(r.collection.features).toHaveLength(1);
+    const ring = r.collection.features[0]!.geometry
+      .coordinates[0] as Position[];
+    expect(ring.length).toBeGreaterThanOrEqual(5); // quad + closure (+ subdivision)
+    expect(ring.every((p) => !(p[0] === 5 && Math.abs(p[1] - 5) < 0.5))).toBe(
+      true,
+    ); // spike midpoint (5,5) excised
   });
 
   it('rewinds a CW outer ring to CCW', () => {

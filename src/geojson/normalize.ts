@@ -37,6 +37,66 @@ const CLOSURE_TOLERANCE = 1e-9;
  * ≈11 cm on the WGS84 ellipsoid — visually invisible, geometrically safe.
  */
 const MAX_ABS_LATITUDE = 90 - 1e-6;
+
+/**
+ * Two non-adjacent vertices within this tolerance (≈1 cm) are the same
+ * point: a self-touch. Measured jitter in world_100.geojson retracing
+ * spikes is well under 1e-7 degrees; genuine distinct border vertices are
+ * never this close.
+ */
+const SELF_TOUCH_TOLERANCE = 1e-7;
+
+/** Bounded re-scan passes for `healSelfTouchingRing`. */
+const MAX_HEAL_PASSES = 16;
+
+/**
+ * Segments longer than this (degrees, great-circle-ish chord length in
+ * lon/lat space) are subdivided with linearly interpolated vertices.
+ * Cesium interpolates long polygon edges along geodesics/rhumb lines before
+ * triangulating; for coarse historical borders those interpolated 3D arcs
+ * can cross other edges in 3D even when the lon/lat ring is simple, which
+ * renders as huge translucent wedge artifacts. Capping segment length keeps
+ * the rendered boundary on the ring.
+ */
+const MAX_SEGMENT_DEG = 2;
+
+/**
+ * Insert intermediate vertices so no segment exceeds `MAX_SEGMENT_DEG`.
+ * Reported once per ring with the inserted-point count. Linear lon/lat
+ * interpolation: at <= 2 deg the deviation from a geodesic is < ~0.5 km,
+ * far below the dataset's own precision.
+ */
+function subdivideLongSegments(
+  ring: Position[],
+  ringId: string,
+  entries: RepairEntry[],
+): Position[] {
+  let inserted = 0;
+  const out: Position[] = [ring[0]!];
+  for (let i = 0; i < ring.length - 1; i++) {
+    const a = ring[i]!;
+    const b = ring[i + 1]!;
+    const d = Math.hypot(b[0] - a[0], b[1] - a[1]);
+    const steps = Math.ceil(d / MAX_SEGMENT_DEG);
+    for (let s = 1; s < steps; s++) {
+      out.push([
+        a[0] + ((b[0] - a[0]) * s) / steps,
+        a[1] + ((b[1] - a[1]) * s) / steps,
+      ]);
+      inserted++;
+    }
+    out.push([b[0], b[1]]);
+  }
+  if (inserted > 0) {
+    entries.push({
+      code: 'subdivided-long-segment',
+      path: ringId,
+      detail: `inserted ${inserted} interpolated vertices; longest segment exceeded ${MAX_SEGMENT_DEG} deg.`,
+    });
+    return out;
+  }
+  return ring;
+}
 /**
  * Minimum absolute shoelace area (square degrees) a closed ring must enclose
  * to be renderable. Rings below this threshold are collinear slivers or
@@ -103,6 +163,7 @@ function normalizeFeature(feature: Feature, index: number): NormalizedFeature {
       working = clampPolarVertices(working, ringPath, entries);
       working = removeConsecutiveDuplicates(working, ringPath, entries);
       working = ensureClosed(working, ringId, entries);
+      working = healSelfTouchingRing(working, ringId, entries);
 
       // Drop the ring if it has fewer than 4 stored positions (3 distinct +
       // closure). Cesium needs at least three distinct points.
@@ -129,6 +190,7 @@ function normalizeFeature(feature: Feature, index: number): NormalizedFeature {
       }
 
       working = normalizeWinding(working, isOuter, ringId, entries);
+      working = subdivideLongSegments(working, ringId, entries);
       ringsOut.push(working);
     });
 
@@ -221,6 +283,76 @@ function clampPolarVertices(
     return [p[0], lat];
   });
   return clamped ? out : ring;
+}
+
+/**
+ * Heal rings that revisit one of their own vertices ("out-and-back" spikes
+ * from hand digitisation). Cesium triangulates such retracing paths into
+ * large wedge/streak artifacts. At each self-touch the ring decomposes into
+ * two closed loops sharing the touched vertex; measured on world_100.geojson
+ * (296 touches) one loop always encloses ~zero surface, so we keep the
+ * larger-area loop and excise the zero-surface one. Every excision is
+ * reported. Re-scans until the ring is clean (bounded passes).
+ */
+function healSelfTouchingRing(
+  ring: Position[],
+  ringId: string,
+  entries: RepairEntry[],
+): Position[] {
+  let working = ring;
+  for (let pass = 0; pass < MAX_HEAL_PASSES; pass++) {
+    const touch = findSelfTouch(working);
+    if (!touch) return working;
+    const [i, j] = touch;
+    const n = working.length - 1; // closed: last == first
+    // Loop A: ring[i..j]; Loop B: ring[j..n-1] + ring[0..i]. Both are closed
+    // by the shared touched vertex.
+    const loopA = working.slice(i, j + 1);
+    const loopB = working.slice(j, n).concat(working.slice(0, i + 1));
+    const areaA = Math.abs(signedArea(loopA));
+    const areaB = Math.abs(signedArea(loopB));
+    let keep = areaA >= areaB ? loopA : loopB;
+    // The two loops share the touched vertex; if keep's last point is that
+    // same vertex, drop the duplicate before re-closing.
+    if (keep.length > 1) {
+      const f = keep[0]!;
+      const l = keep[keep.length - 1]!;
+      if (
+        Math.abs(f[0] - l[0]) <= SELF_TOUCH_TOLERANCE &&
+        Math.abs(f[1] - l[1]) <= SELF_TOUCH_TOLERANCE
+      ) {
+        keep = keep.slice(0, -1);
+      }
+    }
+    entries.push({
+      code: 'removed-retracing-loop',
+      path: ringId,
+      detail: `self-touch at point[${i}] == point[${j}]: excised zero-surface loop (|area| ${Math.min(areaA, areaB).toExponential(2)} deg²), kept ${keep.length}-point loop.`,
+    });
+    if (keep.length + 1 < MIN_RING_POINTS) return keep; // downstream drops it
+    working = [...keep, copyPosition(keep[0]!)];
+  }
+  return working;
+}
+
+/** First (i, j) with i + 2 <= j < n-1 whose endpoints coincide. */
+function findSelfTouch(ring: Position[]): [number, number] | null {
+  const n = ring.length - 1; // closed: last == first
+  if (n < 4) return null;
+  for (let i = 0; i < n; i++) {
+    const a = ring[i]!;
+    for (let j = i + 2; j < n; j++) {
+      if (i === 0 && j === n - 1) continue; // shared closure vertex
+      const b = ring[j]!;
+      if (
+        Math.abs(a[0] - b[0]) <= SELF_TOUCH_TOLERANCE &&
+        Math.abs(a[1] - b[1]) <= SELF_TOUCH_TOLERANCE
+      ) {
+        return [i, j];
+      }
+    }
+  }
+  return null;
 }
 
 function copyPosition(p: Position): Position {
