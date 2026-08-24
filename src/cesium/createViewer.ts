@@ -49,5 +49,14 @@ export function createViewer(container: HTMLElement): Cesium.Viewer {
     viewer.imageryLayers.removeAll();
   }
 
+  // Dev-only handle for browser-automation smoke tests (camera positioning).
+  // The cast keeps `any` out; the property is never read by app code and the
+  // assignment is dead-code-eliminated from production bundles.
+  if (import.meta.env.DEV) {
+    (
+      window as unknown as { __historyAtlasViewer?: Cesium.Viewer }
+    ).__historyAtlasViewer = viewer;
+  }
+
   return viewer;
 }

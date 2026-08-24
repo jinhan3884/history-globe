@@ -434,3 +434,38 @@ Fixes (see D-027, D-028):
 - No production-visible repair reporting (M5).
 - No deployment config (M6).
 - No dataset file edits; normalization stays copy-on-write at runtime.
+
+## M4 review day (2026-08-23) — artifact class identified, repair pending CEO
+
+### Visual artifact review (5 camera positions, headless Chromium)
+
+Clean: global view, Antarctic close-up (clamped pole renders as a smooth
+cap; tooltip fallback "Unknown / Unrecorded territory" confirmed), Pacific
+(Australia/NZ), dateline approach (Fiji/Chukotka lon 180).
+
+**Artifact confirmed:** Mediterranean close-up (lon 14-18, lat 36-43) shows
+the classic wedge + streak artifacts over the Alps/Adriatic.
+
+### Root-cause elimination
+
+- `ring-self-intersection` diagnostic added (proper segment crossings,
+  strict orientation test; 2 new tests; 35 total pass). Live scan: **0
+  proper crossings** — bowtie hypothesis eliminated.
+- Follow-up scan for self-touching rings (non-adjacent vertex revisits,
+  1e-7 deg tolerance): **297 of 741 rings** revisit a vertex — the
+  out-and-back "spike" digitisation pattern (Greenland islets f41, South
+  America coastal spikes f75, Caribbean f70-73...). This is the artifact
+  class; Cesium triangulates retracing rings into wedges.
+
+### Tooling
+
+- Dev-only `window.__historyAtlasViewer` hook in `createViewer.ts` for
+  deterministic camera positioning; driven through injected script tags
+  because `page.evaluate` runs in an isolated world (D-033).
+
+### Status
+
+M4 stops here per plan: repair strategy for the 297 retracing rings needs
+CEO review — (a) split into simple parts, (b) drop with report, (c) offline
+preprocessing. M5/M6 continue after the choice (they are independent of the
+repair).

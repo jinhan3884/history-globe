@@ -119,8 +119,8 @@ Only if Milestone 3 does not remove the artifact:
 - [x] Test hypotheses separately:
   - dateline crossing, — absent from dataset (M2)
   - winding/hole classification, — normalized in M3
-  - self-intersection,
-  - disconnected parts encoded in one ring,
+  - self-intersection, — **tested 2026-08-23**: proper segment crossings = 0 in the whole dataset; NOT the cause
+  - disconnected parts encoded in one ring, — **confirmed 2026-08-23**: 297/741 rings self-touch (revisit a vertex; out-and-back spikes) — the wedge/streak artifact class
   - Cesium triangulation limitation. — **confirmed 2026-08-23**: polar-touching segments crash `EllipsoidRhumbLine` in outline workers; zero-area rings crash triangulation.
 - [~] Select the least destructive fallback:
   1. render offending feature as split entities,
@@ -129,6 +129,16 @@ Only if Milestone 3 does not remove the artifact:
   4. pre-process the source dataset offline.
 - [x] Document why the fallback is safe. (D-027, D-028: clamp ≈11 cm; threshold inside the measured noise/genuine-area gap.)
 - [ ] Save a repaired derivative with provenance if offline preprocessing is used.
+
+**Visual review 2026-08-23 (blocked on repair choice):** global, Antarctic
+and Pacific views are clean; the Mediterranean close-up still shows wedge +
+streak artifacts over the Alps/Adriatic. Root cause class identified as
+self-touching retracing rings (297 rings, e.g. `f41` Greenland islets,
+`f75` South America coastal spikes). `ring-self-intersection` diagnostic
+added (proper crossings only — 0 hits, kept as regression guard). Repair
+strategy for retracing rings needs CEO review before implementation:
+(a) split retracing rings into simple parts, (b) drop self-touching rings
+with report, (c) offline preprocessing with provenance.
 
 Exit criteria:
 

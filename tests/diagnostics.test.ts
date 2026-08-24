@@ -188,6 +188,43 @@ describe('diagnostics', () => {
     expect(codes(c)).toContain('winding-cw-outer');
   });
 
+  it('flags a bowtie ring as ring-self-intersection', () => {
+    // (0,0)->(2,2) crosses (2,0)->(0,2) at (1,1).
+    const c = fc([
+      makeFeature({
+        type: 'Polygon',
+        coordinates: [
+          [
+            [0, 0],
+            [2, 2],
+            [2, 0],
+            [0, 2],
+            [0, 0],
+          ],
+        ],
+      }),
+    ]);
+    expect(codes(c)).toContain('ring-self-intersection');
+  });
+
+  it('does not flag a simple ring as self-intersecting', () => {
+    const c = fc([
+      makeFeature({
+        type: 'Polygon',
+        coordinates: [
+          [
+            [0, 0],
+            [0, 2],
+            [2, 2],
+            [2, 0],
+            [0, 0],
+          ],
+        ],
+      }),
+    ]);
+    expect(codes(c)).not.toContain('ring-self-intersection');
+  });
+
   it('flags a CCW hole as winding-ccw-hole', () => {
     // Outer CCW + hole CCW (should be CW)
     const c = fc([

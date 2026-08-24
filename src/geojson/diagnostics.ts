@@ -69,6 +69,7 @@ function diagnoseFeature(feature: Feature, index: number): FeatureReport {
       checkConsecutiveDuplicates(ring, pIdx, rIdx, issues);
       checkLongitudeJumps(ring, pIdx, rIdx, issues);
       checkWinding(ring, pIdx, rIdx, rIdx === 0, issues);
+      checkSelfIntersection(ring, pIdx, rIdx, issues);
     });
   });
 
@@ -271,4 +272,65 @@ function checkWinding(
       path: `polygon[${pIdx}].ring[${rIdx}]`,
     });
   }
+}
+
+/**
+ * Flags rings that properly cross themselves (bowtie / figure-eight shapes).
+ * Cesium triangulates such rings into long spike/wedge artifacts, which is
+ * the visually confirmed artifact class of M4. Only *proper* crossings are
+ * flagged: shared endpoints, collinear touches, and duplicate points are
+ * endemic to hand-digitised borders and are benign.
+ */
+function checkSelfIntersection(
+  ring: Position[],
+  pIdx: number,
+  rIdx: number,
+  issues: DiagnosticIssue[],
+): void {
+  if (ring.length < MIN_RING_POINTS) return;
+  const n = ring.length - 1; // closed ring: last == first
+  for (let i = 0; i < n - 1; i++) {
+    const a1 = ring[i];
+    const a2 = ring[i + 1];
+    if (!a1 || !a2) continue;
+    for (let j = i + 2; j < n; j++) {
+      // Skip the wrap-around pair (segment 0 shares its endpoint with the
+      // closing segment): touching at a shared vertex is not a crossing.
+      if (i === 0 && j === n - 1) continue;
+      const b1 = ring[j];
+      const b2 = ring[j + 1];
+      if (!b1 || !b2) continue;
+      if (segmentsProperlyCross(a1, a2, b1, b2)) {
+        issues.push({
+          severity: 'warning',
+          code: 'ring-self-intersection',
+          message: `polygon[${pIdx}].ring[${rIdx}] crosses itself: segment ${i}->${i + 1} × segment ${j}->${j + 1}.`,
+          path: `polygon[${pIdx}].ring[${rIdx}].point[${i + 1}]`,
+        });
+        return; // one report per ring is enough for triage
+      }
+    }
+  }
+}
+
+/** Orientation cross product of (o→a) × (o→b). */
+function orientationCross(o: Position, a: Position, b: Position): number {
+  return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+}
+
+/** True when segment a1→a2 strictly crosses segment b1→b2. */
+function segmentsProperlyCross(
+  a1: Position,
+  a2: Position,
+  b1: Position,
+  b2: Position,
+): boolean {
+  const d1 = orientationCross(b1, b2, a1);
+  const d2 = orientationCross(b1, b2, a2);
+  const d3 = orientationCross(a1, a2, b1);
+  const d4 = orientationCross(a1, a2, b2);
+  return (
+    ((d1 > 0 && d2 < 0) || (d1 < 0 && d2 > 0)) &&
+    ((d3 > 0 && d4 < 0) || (d3 < 0 && d4 > 0))
+  );
 }

@@ -220,3 +220,26 @@ removed. Verified fixes from the interrupted session (Cesium pin + shim,
 degenerate-ring work) were kept only after independent verification:
 typecheck, 33 unit tests, production build, and browser smoke tests of dev,
 preview, and token-less builds.
+
+## D-032 — Self-intersection diagnostic scope
+
+**Decision:** `checkSelfIntersection` in `src/geojson/diagnostics.ts` flags
+only *proper* segment crossings (strict orientation test, shared endpoints
+and collinear touches ignored). Result on the live dataset: **0 proper
+crossings** — so the classic bowtie hypothesis is dead. The actual artifact
+class is **self-touching retracing rings**: 297 of 741 rings revisit one of
+their own vertices (out-and-back digitisation of small islands/coastal
+spikes). Cesium triangulates these into the wedge/streak artifacts visible
+in the Mediterranean close-up (Alps/Adriatic wedge). Repair strategy is
+pending CEO review: (a) split retracing rings into simple parts, (b) drop
+self-touching rings with report, (c) offline preprocessing with
+provenance. The diagnostic ships as a regression guard either way.
+
+## D-033 — Dev-only viewer test hook
+
+**Decision:** `createViewer` exposes `window.__historyAtlasViewer` in dev
+bundles only (`import.meta.env.DEV`), typed via a narrow cast, never read
+by app code, dead-code-eliminated in production. Purpose: deterministic
+camera positioning for browser smoke tests. Note: the browser tool's
+`page.evaluate` runs in an isolated world — main-world globals must be
+reached via injected `<script>` tags writing results to DOM attributes.
