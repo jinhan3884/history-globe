@@ -38,8 +38,13 @@ export default defineConfig({
           rename: { stripBase: CESIUM_STRIP_BASE },
         },
         {
-          src: 'data/historical-basemaps/world_100.geojson',
-          dest: 'data/historical-basemaps',
+          src: 'data/*.geojson',
+          dest: 'data',
+          rename: { stripBase: DATA_STRIP_BASE },
+        },
+        {
+          src: 'data/years.json',
+          dest: 'data',
           rename: { stripBase: DATA_STRIP_BASE },
         },
       ],
