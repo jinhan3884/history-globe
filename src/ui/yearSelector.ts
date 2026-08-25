@@ -48,13 +48,13 @@ export function createYearSelector(
     }
     .ys-arrow {
       width: 100%;
-      height: 28px;
+      height: 36px;
       display: flex;
       align-items: center;
       justify-content: center;
       color: #8899aa;
       cursor: pointer;
-      font-size: 14px;
+      font-size: 18px;
       flex-shrink: 0;
       background: none;
       border: none;
@@ -145,6 +145,11 @@ export function createYearSelector(
   downBtn.textContent = '▼';
   downBtn.addEventListener('click', () => step(1));
   bar.append(downBtn);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') step(1);
+    else if (e.key === 'ArrowRight' || e.key === 'ArrowUp') step(-1);
+  });
 
   const loadingEl = document.createElement('div');
   loadingEl.className = 'ys-loading';
