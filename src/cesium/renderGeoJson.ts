@@ -59,11 +59,17 @@ export async function renderGeoJson(
     const camPos = viewer.camera.positionWC;
     const camDist = Cesium.Cartesian3.magnitude(camPos);
     const horizonDot = 6371000 / camDist;
-    const normCam = Cesium.Cartesian3.normalize(camPos, new Cesium.Cartesian3());
+    const normCam = Cesium.Cartesian3.normalize(
+      camPos,
+      new Cesium.Cartesian3(),
+    );
     for (const e of labelEntities) {
       const lblPos = e.position?.getValue(Cesium.JulianDate.now());
       if (!lblPos) continue;
-      const normLbl = Cesium.Cartesian3.normalize(lblPos, new Cesium.Cartesian3());
+      const normLbl = Cesium.Cartesian3.normalize(
+        lblPos,
+        new Cesium.Cartesian3(),
+      );
       e.show = Cesium.Cartesian3.dot(normCam, normLbl) > horizonDot;
     }
   });
@@ -72,13 +78,15 @@ export async function renderGeoJson(
   // CLAMP_TO_GROUND keeps labels on the ellipsoid with proper occlusion.
   const seenLabels = new Set<string>();
   for (const entity of dataSource.entities.values) {
-    if (!entity.polygon || !entity.name || entity.name === UNNAMED_LABEL) continue;
+    if (!entity.polygon || !entity.name || entity.name === UNNAMED_LABEL)
+      continue;
     if (seenLabels.has(entity.name)) continue;
     seenLabels.add(entity.name);
     const now = Cesium.JulianDate.now();
     const h = entity.polygon.hierarchy?.getValue(now);
     if (!h || h.positions.length < 3) continue;
-    let lonSum = 0, latSum = 0;
+    let lonSum = 0,
+      latSum = 0;
     for (const p of h.positions) {
       const c = Cesium.Cartographic.fromCartesian(p);
       lonSum += c.longitude;
@@ -92,7 +100,7 @@ export async function renderGeoJson(
       label: {
         text: entity.name,
         font: 'bold 14px sans-serif',
-        fillColor: new Cesium.Color(0.06, 0.1, 0.24, 1),  // dark navy blue
+        fillColor: new Cesium.Color(0.06, 0.1, 0.24, 1), // dark navy blue
         outlineColor: new Cesium.Color(0.12, 0.18, 0.4, 1),
         outlineWidth: 2,
         style: Cesium.LabelStyle.FILL_AND_OUTLINE,

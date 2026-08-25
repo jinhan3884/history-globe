@@ -13,6 +13,8 @@ import { createErrorPanel } from './ui/errorPanel';
 import { createTooltip } from './ui/tooltip';
 import { createAboutPanel } from './ui/aboutPanel';
 import { UNNAMED_LABEL } from './geojson/types';
+import { createYearSelector } from './ui/yearSelector';
+import { loadYear } from './geojson/loadYear';
 
 /**
  * Mount point #root hosts three children:
@@ -73,6 +75,40 @@ function rendering(
 
   mountAttribution(root);
 
+  // Year selector
+  const yearSelector = createYearSelector(root, {
+    onYearChange(_year: number, file: string) {
+      loading.setText('Loading historical data…');
+      loadYear(file)
+        .then((collection) => {
+          // Remove old data source
+          const oldDs = viewer.dataSources.get(0);
+          if (oldDs) viewer.dataSources.remove(oldDs, true);
+          // Remove old labels
+          viewer.entities.removeAll();
+          // Render new data
+          renderGeoJson(viewer, collection).then(() => {
+            loading.hide();
+          });
+        })
+        .catch(() => {
+          loading.setText('Failed to load historical data.');
+        });
+    },
+  });
+
+  // Fetch years.json and populate selector
+  fetch('/data/years.json')
+    .then((res) => res.json())
+    .then((entries) => {
+      yearSelector.setYears(entries);
+      const defaultEntry =
+        entries.find((e: { year: number }) => e.year === 100) ?? entries[0];
+      if (defaultEntry) {
+        yearSelector.setCurrentYear(defaultEntry.year);
+      }
+    });
+
   loading.setText('Loading the historical globe…');
   void loadDataset(viewer, loading, errorPanel);
 }
@@ -129,7 +165,7 @@ async function loadDataset(
             destination: Cesium.Cartesian3.fromDegrees(
               pos.coords.longitude,
               pos.coords.latitude,
-               9_000_000,
+              9_000_000,
             ),
             duration: 3,
           });

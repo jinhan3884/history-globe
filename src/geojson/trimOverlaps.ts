@@ -135,10 +135,20 @@ export function trimThinOverlaps(input: FeatureCollection): TrimOverlapsResult {
         continue; // meaningful overlap — keep it
       }
 
-      const difference = polygonClipping.difference(
-        later.geom as Geom,
-        intersection as Geom,
-      ) as ClippingMultiPolygon;
+      let difference: ClippingMultiPolygon;
+      try {
+        difference = polygonClipping.difference(
+          later.geom as Geom,
+          intersection as Geom,
+        ) as ClippingMultiPolygon;
+      } catch {
+        entries.push({
+          code: 'overlap-trim-failed',
+          path: `feature[${j}]`,
+          detail: `polygon-clipping difference threw for pair [${i}]+[${j}]; overlap left as-is.`,
+        });
+        continue;
+      }
       const trimmedArea = multiPolygonArea(difference);
       if (trimmedArea <= 0) continue; // would erase the feature entirely
 
