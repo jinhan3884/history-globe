@@ -51,6 +51,59 @@ export async function renderGeoJson(
   }
 
   viewer.dataSources.add(dataSource);
+
+  // Backface culling for labels: hide labels on the far side of the globe.
+  // Runs every frame via preRender.
+  const labelEntities: Cesium.Entity[] = [];
+  viewer.scene.preRender.addEventListener(() => {
+    const camPos = viewer.camera.positionWC;
+    const camDist = Cesium.Cartesian3.magnitude(camPos);
+    const horizonDot = 6371000 / camDist;
+    const normCam = Cesium.Cartesian3.normalize(camPos, new Cesium.Cartesian3());
+    for (const e of labelEntities) {
+      const lblPos = e.position?.getValue(Cesium.JulianDate.now());
+      if (!lblPos) continue;
+      const normLbl = Cesium.Cartesian3.normalize(lblPos, new Cesium.Cartesian3());
+      e.show = Cesium.Cartesian3.dot(normCam, normLbl) > horizonDot;
+    }
+  });
+
+  // Add ONE globe-surface label per named territory (deduplicated by name).
+  // CLAMP_TO_GROUND keeps labels on the ellipsoid with proper occlusion.
+  const seenLabels = new Set<string>();
+  for (const entity of dataSource.entities.values) {
+    if (!entity.polygon || !entity.name || entity.name === UNNAMED_LABEL) continue;
+    if (seenLabels.has(entity.name)) continue;
+    seenLabels.add(entity.name);
+    const now = Cesium.JulianDate.now();
+    const h = entity.polygon.hierarchy?.getValue(now);
+    if (!h || h.positions.length < 3) continue;
+    let lonSum = 0, latSum = 0;
+    for (const p of h.positions) {
+      const c = Cesium.Cartographic.fromCartesian(p);
+      lonSum += c.longitude;
+      latSum += c.latitude;
+    }
+    const lon = lonSum / h.positions.length;
+    const lat = latSum / h.positions.length;
+    const centroid = Cesium.Cartesian3.fromRadians(lon, lat, 0);
+    const labelEntity = viewer.entities.add({
+      position: centroid,
+      label: {
+        text: entity.name,
+        font: 'bold 14px sans-serif',
+        fillColor: new Cesium.Color(0.06, 0.1, 0.24, 1),  // dark navy blue
+        outlineColor: new Cesium.Color(0.12, 0.18, 0.4, 1),
+        outlineWidth: 2,
+        style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+        pixelOffset: new Cesium.Cartesian2(0, -20),
+        eyeOffset: new Cesium.Cartesian3(0, 0, -1000),
+        disableDepthTestDistance: Number.POSITIVE_INFINITY,
+        scaleByDistance: new Cesium.NearFarScalar(500, 1.6, 15e6, 0.2),
+      },
+    } as any);
+    labelEntities.push(labelEntity);
+  }
   return dataSource;
 }
 
