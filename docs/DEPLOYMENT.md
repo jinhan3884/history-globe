@@ -38,10 +38,15 @@ The build is fully static; no server runtime is required.
 ## Custom domain
 
 1. Pages project → Custom domains → Set up a custom domain →
-   `historyatlas.net`, then add `www` → redirect to apex.
-2. If the zone is on Cloudflare, DNS records are created automatically;
-   otherwise add the shown CNAME at the registrar. HTTPS certificates are
-   issued automatically.
+   `historyatlas.net`, then add `www.historyatlas.net` → redirect to apex.
+2. If the zone is on Cloudflare, both DNS records are created automatically.
+   HTTPS certificates are issued automatically.
+
+To redirect `www.historyatlas.net` → `historyatlas.net`:
+
+1. Cloudflare dashboard → **Rules** → **Bulk Redirects**
+2. Create a bulk redirect rule: source `www.historyatlas.net/*` → target
+   `https://historyatlas.net/` + path, status 301, preserve query string.
 
 ## Caching
 
