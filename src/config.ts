@@ -26,7 +26,7 @@ export const hasCesiumIonToken: boolean = cesiumIonToken.length > 0;
  * copied path inside the production `dist/` tree.
  */
 export const DATASET_PATH: string =
-  '/data/historical-basemaps/world_100.geojson' as const;
+  '/data/world_100.geojson' as const;
 
 /**
  * Privacy-friendly analytics placeholder. Empty by default: no analytics
