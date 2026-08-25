@@ -23,7 +23,10 @@ export function createLabelOverlay(root: HTMLElement): LabelOverlayController {
     const scene = viewer.scene;
     for (const l of labels) {
       const pos = Cesium.Cartesian3.fromDegrees(l.lon, l.lat, 0);
-      const screenPos = Cesium.SceneTransforms.wgs84ToWindowCoordinates(scene, pos);
+      const screenPos = Cesium.SceneTransforms.wgs84ToWindowCoordinates(
+        scene,
+        pos,
+      );
       if (screenPos) {
         const dist = Cesium.Cartesian3.distance(scene.camera.positionWC, pos);
         const scale = Math.max(0.6, Math.min(3.0, 3500000 / dist));
@@ -48,14 +51,19 @@ export function createLabelOverlay(root: HTMLElement): LabelOverlayController {
       for (const f of collection.features) {
         const name = f.properties.NAME;
         if (!name || name === UNNAMED_LABEL) continue;
-        const polys = f.geometry.type === 'MultiPolygon'
-          ? (f.geometry.coordinates as number[][][][])
-          : [(f.geometry.coordinates as number[][][])];
-        let lonSum = 0, latSum = 0, count = 0;
+        const polys =
+          f.geometry.type === 'MultiPolygon'
+            ? (f.geometry.coordinates as number[][][][])
+            : [f.geometry.coordinates as number[][][]];
+        let lonSum = 0,
+          latSum = 0,
+          count = 0;
         for (const poly of polys) {
           for (const ring of poly) {
             for (const p of ring) {
-              lonSum += p[0]!; latSum += p[1]!; count++;
+              lonSum += p[0]!;
+              latSum += p[1]!;
+              count++;
             }
           }
         }

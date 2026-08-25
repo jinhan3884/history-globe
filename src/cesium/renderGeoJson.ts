@@ -41,15 +41,13 @@ export async function renderGeoJson(
     if (entity.polygon) {
       const hue = nameHue(name);
       entity.polygon.material = new Cesium.ColorMaterialProperty(
-        Cesium.Color.fromHsl(hue, 0.48, 0.55, 0.9),  // near-opaque w/ faint imagery
+        Cesium.Color.fromHsl(hue, 0.48, 0.55, 0.9), // near-opaque w/ faint imagery
       );
       entity.polygon.outline = new Cesium.ConstantProperty(true);
       entity.polygon.outlineColor = new Cesium.ConstantProperty(
         Cesium.Color.fromHsl(hue, 0.55, 0.22, 0.9),
       );
     }
-
-
   }
 
   viewer.dataSources.add(dataSource);

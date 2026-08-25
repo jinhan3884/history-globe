@@ -120,7 +120,10 @@ async function loadDataset(
     );
     const dataSource = await renderGeoJson(viewer, normalized.collection);
     loading.hide();
-    labelOverlay.update(normalized.collection, viewer as unknown as { scene: Cesium.Scene });
+    labelOverlay.update(
+      normalized.collection,
+      viewer as unknown as { scene: Cesium.Scene },
+    );
     await viewer.flyTo(dataSource);
   } catch (loadError) {
     loading.hide();
