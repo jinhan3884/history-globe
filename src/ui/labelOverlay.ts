@@ -28,7 +28,26 @@ export function createLabelOverlay(root: HTMLElement): LabelOverlayController {
         pos,
       );
       if (screenPos) {
-        const dist = Cesium.Cartesian3.distance(scene.camera.positionWC, pos);
+        // Cull labels on the far side of the globe using horizon angle
+        const camPos = scene.camera.positionWC;
+        const earthRadius = 6371000;
+        const camDist = Cesium.Cartesian3.magnitude(camPos);
+        const horizonDot = earthRadius / camDist; // cos(horizonAngle)
+        const normCam = Cesium.Cartesian3.normalize(
+          camPos,
+          new Cesium.Cartesian3(),
+        );
+        const normLbl = Cesium.Cartesian3.normalize(
+          pos,
+          new Cesium.Cartesian3(),
+        );
+        // Label is visible if dot(normalize(cam), normalize(lbl)) > horizonDot
+        // i.e., the angle between cam and label from Earth center is within the horizon
+        if (Cesium.Cartesian3.dot(normCam, normLbl) < horizonDot) {
+          l.el.style.display = 'none';
+          continue;
+        }
+        const dist = Cesium.Cartesian3.distance(camPos, pos);
         const scale = Math.max(0.6, Math.min(3.0, 3500000 / dist));
         const fs = Math.round(14 * scale);
         l.el.style.display = '';
@@ -71,8 +90,8 @@ export function createLabelOverlay(root: HTMLElement): LabelOverlayController {
         const el = document.createElement('div');
         el.textContent = name;
         el.style.cssText =
-          'position:absolute;color:white;font-family:ui-sans-serif,system-ui,sans-serif;' +
-          'font-weight:bold;text-shadow:0 0 4px rgba(0,0,0,0.8),0 0 8px rgba(0,0,0,0.6);' +
+          'position:absolute;color:rgb(15, 25, 60);font-family:ui-sans-serif,system-ui,sans-serif;' +
+          'font-weight:bold;text-shadow:0 0 4px rgba(255,255,255,0.9),0 0 8px rgba(255,255,255,0.7);' +
           'white-space:nowrap;pointer-events:none';
         container.append(el);
         labels.push({ el, lon: lonSum / count, lat: latSum / count });
