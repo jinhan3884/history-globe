@@ -7,20 +7,6 @@
  */
 
 /**
- * Cesium Ion access token, read from the Vite environment at build time.
- * Always `string` — empty string means "no token provided". Downstream code
- * must treat the empty string as "absent" and avoid passing it to Cesium.
- */
-export const cesiumIonToken: string =
-  import.meta.env.VITE_CESIUM_ION_TOKEN ?? '';
-
-/**
- * Whether a usable Ion token is configured. Convenience flag so callers do
- * not have to repeat the empty-string check.
- */
-export const hasCesiumIonToken: boolean = cesiumIonToken.length > 0;
-
-/**
  * Public base URL where the local historical GeoJSON dataset is served,
  * relative to the site root. Works for `vite dev`, `vite preview`, and the
  * copied path inside the production `dist/` tree.
