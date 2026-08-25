@@ -48,6 +48,8 @@ export async function renderGeoJson(
         Cesium.Color.fromHsl(hue, 0.55, 0.22, 0.9),
       );
     }
+
+
   }
 
   viewer.dataSources.add(dataSource);

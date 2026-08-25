@@ -12,6 +12,7 @@ import { createLoading } from './ui/loading';
 import { createErrorPanel } from './ui/errorPanel';
 import { createTooltip } from './ui/tooltip';
 import { createAboutPanel } from './ui/aboutPanel';
+import { createLabelOverlay } from './ui/labelOverlay';
 import { UNNAMED_LABEL } from './geojson/types';
 
 /**
@@ -30,13 +31,15 @@ export function mountApp(root: HTMLElement): void {
   const loading = createLoading(root);
   const errorPanel = createErrorPanel(root);
   createAboutPanel(root);
-  rendering(root, loading, errorPanel);
+  const labelOverlay = createLabelOverlay(root);
+  rendering(root, loading, errorPanel, labelOverlay);
 }
 
 function rendering(
   root: HTMLElement,
   loading: ReturnType<typeof createLoading>,
   errorPanel: ReturnType<typeof createErrorPanel>,
+  labelOverlay: ReturnType<typeof createLabelOverlay>,
 ): void {
   let viewer: Cesium.Viewer;
   try {
@@ -74,13 +77,14 @@ function rendering(
   mountAttribution(root);
 
   loading.setText('Loading the historical globe…');
-  void loadDataset(viewer, loading, errorPanel);
+  void loadDataset(viewer, loading, errorPanel, labelOverlay);
 }
 
 async function loadDataset(
   viewer: Cesium.Viewer,
   loading: ReturnType<typeof createLoading>,
   errorPanel: ReturnType<typeof createErrorPanel>,
+  labelOverlay: ReturnType<typeof createLabelOverlay>,
 ): Promise<void> {
   try {
     const result = await loadGeoJson(DATASET_PATH);
@@ -116,6 +120,7 @@ async function loadDataset(
     );
     const dataSource = await renderGeoJson(viewer, normalized.collection);
     loading.hide();
+    labelOverlay.update(normalized.collection, viewer as unknown as { scene: Cesium.Scene });
     await viewer.flyTo(dataSource);
   } catch (loadError) {
     loading.hide();
