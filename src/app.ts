@@ -193,7 +193,9 @@ function mountAttribution(root: HTMLElement): void {
   const credit = document.createElement('div');
   credit.className = 'attribution';
   credit.innerHTML = [
-    '<strong>History Atlas</strong> — History has coordinates. Powered by <a href="https://cesium.com/platform/cesiumjs/" target="_blank" rel="noopener">CesiumJS</a>.',
+        '<strong>History Atlas</strong> — History has coordinates.',
+    ' <img src="/cesiumjs-logomark.svg" alt="CesiumJS" style="height:14px;vertical-align:middle;display:inline-block;margin:0 2px;"> ',
+    'Powered by <a href="https://cesium.com/platform/cesiumjs/" target="_blank" rel="noopener">CesiumJS</a>.',
     ' Historical basemap: world, 100 CE.',
     ' Data source and license: see About.',
   ].join(' ');
