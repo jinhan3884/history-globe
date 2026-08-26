@@ -16,7 +16,6 @@
     "lint": "oxlint ."
   },
   "dependencies": {
-    "@mapbox/polylabel": "^1.0.2",
     "cesium": "1.114.0",
     "polygon-clipping": "^0.15.7"
   },
