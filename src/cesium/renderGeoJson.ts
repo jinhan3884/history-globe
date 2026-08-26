@@ -82,6 +82,22 @@ export async function renderGeoJson(
     } as unknown as Cesium.Entity);  // Cesium runtime accepts plain-opts label
     labelEntities.push(labelEntity);
   }
+
+  // Backface culling: hide labels on the far side of the globe every frame.
+  viewer.scene.preRender.addEventListener(() => {
+    if (labelEntities.length === 0) return;
+    const camPos = viewer.camera.positionWC;
+    const camDist = Cesium.Cartesian3.magnitude(camPos);
+    const horizonDot = 6371000 / camDist;
+    const normCam = Cesium.Cartesian3.normalize(camPos, new Cesium.Cartesian3());
+    for (const e of labelEntities) {
+      const lblPos = e.position?.getValue(Cesium.JulianDate.now());
+      if (!lblPos) { e.show = false; continue; }
+      const normLbl = Cesium.Cartesian3.normalize(lblPos, new Cesium.Cartesian3());
+      e.show = Cesium.Cartesian3.dot(normCam, normLbl) > horizonDot;
+    }
+  });
+
   return dataSource;
 }
 
