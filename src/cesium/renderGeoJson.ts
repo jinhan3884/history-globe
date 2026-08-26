@@ -1,8 +1,7 @@
 import * as Cesium from 'cesium';
-// @ts-expect-error — @mapbox/polylabel has no bundled type declarations
-import polylabel from '@mapbox/polylabel';
 import type { FeatureCollection } from '../geojson/types';
 import { UNNAMED_LABEL } from '../geojson/types';
+import { computeLabelPosition } from './labelPosition';
 
 export async function renderGeoJson(
   viewer: Cesium.Viewer,
@@ -16,10 +15,14 @@ export async function renderGeoJson(
 
   for (const entity of dataSource.entities.values) {
     const nameProp = entity.properties?.NAME;
-    const rawName = nameProp !== undefined && nameProp !== null
-      ? (nameProp.getValue(Cesium.JulianDate.now()) as unknown)
-      : null;
-    const name = typeof rawName === 'string' && rawName.length > 0 ? rawName : UNNAMED_LABEL;
+    const rawName =
+      nameProp !== undefined && nameProp !== null
+        ? (nameProp.getValue(Cesium.JulianDate.now()) as unknown)
+        : null;
+    const name =
+      typeof rawName === 'string' && rawName.length > 0
+        ? rawName
+        : UNNAMED_LABEL;
     entity.name = name;
     if (entity.polygon) {
       const hue = nameHue(name);
@@ -41,7 +44,8 @@ export async function renderGeoJson(
   const bestEntity = new Map<string, Cesium.Entity>();
   const bestSize = new Map<string, number>();
   for (const entity of dataSource.entities.values) {
-    if (!entity.polygon || !entity.name || entity.name === UNNAMED_LABEL) continue;
+    if (!entity.polygon || !entity.name || entity.name === UNNAMED_LABEL)
+      continue;
     const now = Cesium.JulianDate.now();
     if (!entity.polygon) continue;
     const h = entity.polygon.hierarchy?.getValue(now);
@@ -58,13 +62,15 @@ export async function renderGeoJson(
     if (!entity.polygon) continue;
     const h = entity.polygon.hierarchy?.getValue(now);
     if (!h) continue;
-    const ringDeg: [number, number][] = [];
-    for (const p of h.positions) {
-      const c = Cesium.Cartographic.fromCartesian(p);
-      ringDeg.push([Cesium.Math.toDegrees(c.longitude), Cesium.Math.toDegrees(c.latitude)]);
-    }
-    const poi = polylabel([ringDeg], 0.5) as [number, number];
-    const centroid = Cesium.Cartesian3.fromDegrees(poi[0], poi[1], 0);
+    const holes = h.holes
+      ?.map((hole: Cesium.PolygonHierarchy) => hole.positions)
+      .filter((p: readonly Cesium.Cartesian3[]) => p.length >= 3);
+    const pos = computeLabelPosition(h.positions, holes);
+    const centroid = Cesium.Cartesian3.fromDegrees(
+      pos.longitude,
+      pos.latitude,
+      0,
+    );
     const labelEntity = viewer.entities.add({
       position: centroid,
       label: {
@@ -79,7 +85,7 @@ export async function renderGeoJson(
         disableDepthTestDistance: Number.POSITIVE_INFINITY,
         scaleByDistance: new Cesium.NearFarScalar(500, 1.6, 15e6, 0.2),
       },
-    } as unknown as Cesium.Entity);  // Cesium runtime accepts plain-opts label
+    } as unknown as Cesium.Entity); // Cesium runtime accepts plain-opts label
     labelEntities.push(labelEntity);
   }
 
@@ -89,11 +95,20 @@ export async function renderGeoJson(
     const camPos = viewer.camera.positionWC;
     const camDist = Cesium.Cartesian3.magnitude(camPos);
     const horizonDot = 6371000 / camDist;
-    const normCam = Cesium.Cartesian3.normalize(camPos, new Cesium.Cartesian3());
+    const normCam = Cesium.Cartesian3.normalize(
+      camPos,
+      new Cesium.Cartesian3(),
+    );
     for (const e of labelEntities) {
       const lblPos = e.position?.getValue(Cesium.JulianDate.now());
-      if (!lblPos) { e.show = false; continue; }
-      const normLbl = Cesium.Cartesian3.normalize(lblPos, new Cesium.Cartesian3());
+      if (!lblPos) {
+        e.show = false;
+        continue;
+      }
+      const normLbl = Cesium.Cartesian3.normalize(
+        lblPos,
+        new Cesium.Cartesian3(),
+      );
       e.show = Cesium.Cartesian3.dot(normCam, normLbl) > horizonDot;
     }
   });

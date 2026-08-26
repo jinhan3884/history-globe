@@ -1,0 +1,3183 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.63302813337931,
+          -3.5535847851851163
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -5.620105820315533,
+          55.47645392193088
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.905289629184892,
+          53.91017886252765
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -135.21597979644184,
+          57.24187228014973
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -166.78127150663977,
+          53.83255803291498
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -156.42898132464956,
+          20.774759884939236
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -158.2190710483687,
+          21.44669011236791
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -168.22077617166258,
+          53.420755855754656
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -162.96028980294113,
+          55.08346261336928
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.625746151824838,
+          3.4721878459845965
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Meroe",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          32.70197105169698,
+          16.25154273128444
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.03666575578812,
+          -8.472282276473301
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Saka Kingdom",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.51952042835352,
+          26.605801936174117
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Satavahanihara",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.02191167257354,
+          16.52594332505525
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Hadramaut",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          50.73959363229824,
+          16.488459990284
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Himyarite Kingdom",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          45.215675924848384,
+          15.553044840202556
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.784428669135032,
+          36.371028902068375
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          26.017469313961332,
+          36.90991092813328
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -68.24312978515624,
+          12.193036725608136
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -61.80234795727926,
+          17.07578320214844
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -68.86423916117147,
+          12.123495289062589
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -61.67597117578125,
+          12.106130659948839
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -62.189119443359374,
+          16.726781938048987
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -62.580053212890626,
+          17.135676764136246
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -62.77052305866677,
+          17.3374678046875
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -61.04022994377782,
+          16.32387791015625
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -62.964909427734376,
+          17.482321778295955
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Hindu kingdoms",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.51139723043745,
+          28.07442277045677
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.26933485588187,
+          16.91820124881213
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.95547853728884,
+          13.031345987299455
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          124.9142117979204,
+          12.195028067479045
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          122.32561000010126,
+          11.118596882192385
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          119.31184314509981,
+          10.57711521278307
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          122.67457680722826,
+          9.63270322052604
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.64936136027926,
+          8.900904614079389
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          124.85682073230741,
+          7.612871018021074
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.0067066135084,
+          -38.850594968859596
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          169.1757310362732,
+          -45.32266774666347
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -18.952631532928148,
+          64.59256682546501
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -40.78811235660512,
+          76.56225220907953
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -22.997221162150257,
+          72.49221427244753
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -70.45981193015224,
+          -71.41627380690083
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -97.86626899967337,
+          -72.20653574167127
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -150.17159753102393,
+          -76.97334450481767
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -162.0747946096385,
+          -79.2814974645174
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Hainan",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          109.4356763179011,
+          19.017649514616174
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          141.3963241874543,
+          -5.782386543330098
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.9176068251419,
+          -5.98054949565168
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          124.0212688225857,
+          -9.895909627883988
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.73030758222693,
+          0.47682971660013546
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.52558310580523,
+          -8.662378784253555
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.42264057681325,
+          -3.2249917755679363
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          138.43256386373562,
+          -7.923028964068102
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          119.7172062207097,
+          -9.742578999123829
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.05031202307099,
+          -2.1389478728345117
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.854922790472752,
+          78.87960385224899
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.088669266923546,
+          79.73589486257796
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Simhala",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          80.84958643784874,
+          7.057558656518056
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Maya chiefdoms and states",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -91.07346820591839,
+          16.385184335940835
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Paleo-Inuit",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -56.55448506640142,
+          48.74987270149229
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -60.188007902892885,
+          46.03118752312776
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -7.517446071914041,
+          52.99367505483108
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Dumonii",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.050223502371546,
+          50.72031559610431
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Moche",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.11418354984453,
+          -10.943288353384753
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.37087863581472,
+          -1.7120141084752254
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -61.423204885534915,
+          10.284678821467502
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          58.88451601686338,
+          75.06526245923405
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          54.02276414951438,
+          71.93294081965477
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.926727210250354,
+          57.21943814867799
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.638029385750539,
+          55.41019045252093
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.70680678957876,
+          81.4941789661857
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -110.24383796824395,
+          71.88741301140105
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -175.08928406924005,
+          67.15654645661454
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -91.81655319461471,
+          79.9964695292243
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -118.01408049109249,
+          73.79254047413652
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -107.81088232711026,
+          75.46421732010012
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -120.54344742426521,
+          76.5300834216654
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -101.756434817406,
+          78.60602306499447
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.93149913901335,
+          75.86505957040563
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.4578829338575,
+          78.3181789493579
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -153.96628081889972,
+          57.21241158248548
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -169.98374676493,
+          63.34161178024177
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -111.8943293241196,
+          77.73907846959
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -161.5005251679404,
+          55.67635095866088
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -155.64973818937187,
+          19.678638793853118
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -163.70977141256424,
+          54.83519561962847
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -136.07102652957101,
+          57.9426826089776
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -102.76621548717935,
+          22.149188828418986
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Monte Albán",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -97.13037314279944,
+          17.18873806979868
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Axum",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          39.15814093184964,
+          14.199484395746136
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Suren Kingdom",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          65.45810062311895,
+          31.39957571286264
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          102.80849306231492,
+          -2.2858580693467916
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          113.96341823732608,
+          0.24322259469021068
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.93227782727058,
+          -7.587555749326306
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.00572558835334,
+          -8.850325889869886
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.27211089005822,
+          -2.7964406819865357
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Kalinga",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          84.61107169224186,
+          21.429325882154814
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Hindu kingdoms",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.7462911992838,
+          11.204894194975157
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          45.355773853471376,
+          24.4544573073623
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.386365335735167,
+          53.870328202859206
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Teotihuacán",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.68803114931333,
+          19.910949008057695
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Guanches",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -14.021952721477593,
+          28.310069305587334
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Boihaenum",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.67991841008625,
+          48.37029152200456
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Dacia",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.881996302737477,
+          45.63748592926123
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.08507060246696,
+          56.835169499157246
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Armenia",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          44.78674738840847,
+          39.863062568204136
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Bosporian Kingdom",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          33.92962294562143,
+          44.817890882507605
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Parthian Empire",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          55.52830003192372,
+          32.04122219340799
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Roman Empire",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.507749882702135,
+          46.90071058024245
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Subarctic forest hunter-gatherers",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -124.94318617750841,
+          59.65905619533965
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Southern Xiongnu",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          104.29382162962675,
+          41.28537981941582
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Yueban",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.79077806904334,
+          46.214381146217576
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Australian aboriginal hunter-gatherers",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          132.15392304367023,
+          -23.322836013253905
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tasmanian hunter-gatherers",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.79503239254498,
+          -42.21405254831726
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ainu",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          142.71647045886246,
+          43.283135378990195
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Han",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          111.76520677113317,
+          29.69543676049926
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Yayoi",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          138.4448971196754,
+          36.04735632987384
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Paleo-Siberian hunter-gatherers",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.1316443204538,
+          62.68927159462268
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Saami",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          26.378642140646832,
+          67.87642755788455
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Finno-Ugric taiga hunter-gatherers",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          58.81329891604214,
+          62.83779818520972
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Arctic marine mammal hunters",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -104.18150975045809,
+          62.29974999860885
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Andean hunter-gatherers",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -69.51515239363755,
+          -32.14466200079645
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Pampas cultures",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -63.30103008278092,
+          -35.24283996299281
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Caribbean hunter-gatherers",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -69.56226594578449,
+          9.947469822268488
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Patagonian shellfish and marine mammal hunters",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -72.64521756459926,
+          -50.96756926421314
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Shellfish gatherers",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -45.534292511865225,
+          -22.64661963478271
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Savanna hunter-gatherers",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -58.00399141364589,
+          -21.8451085681381
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Amazon hunter-gatherers",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -61.63711871677196,
+          -7.792420289112027
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Plain bison hunters",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -102.88149191527937,
+          43.73017008187569
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Desert hunter-gatherers",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -115.0043466422723,
+          37.69689778431334
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Plateau fichers and hunter gatherers",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -116.74048179328922,
+          45.22666328725308
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "North American Pacifi foraging, hunting and fishing peoples",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.31643371847471,
+          44.176874432711884
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Khoiasan",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          26.62950543835928,
+          -10.17096185495081
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          37.28701748931281,
+          16.970064680718778
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "West African cereal farmers",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          43.17325436750777,
+          5.9759171271281755
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Blemmyes",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.33492143358009,
+          21.728021270746062
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Marksville Culture",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -92.08407077776009,
+          31.33226115500006
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Fourche Maline Culture",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -94.44161911176793,
+          33.864938034018245
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Mill Creek Culture",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -95.27302768933669,
+          32.31809994207077
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Swift Creek Culture",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -84.41302605821767,
+          32.13872211490072
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Miller",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -89.15162558288107,
+          34.320642828457046
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Laurel complex",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -93.84996544826778,
+          48.99945216955335
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Copena",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -86.93283871472082,
+          34.164650612999594
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Porter",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -88.3872030677911,
+          31.90685722332161
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Saugeen Complex",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -80.96794239991009,
+          43.232517678396114
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Couture Complex",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.51854652824291,
+          42.67476038568799
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Point Peninsula",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.98554565339825,
+          45.831647412642
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Hopewell Culture",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -90.20586494429955,
+          41.49499045041311
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -80.3365241077345,
+          35.35880954868706
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.77941971623885,
+          28.88718723878073
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -82.29490678439673,
+          42.429968141435936
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -80.84127314312069,
+          41.552916684327904
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -87.36562564656649,
+          40.00947942920596
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -84.5613740181206,
+          44.3753382076972
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -89.00267357054878,
+          45.63594966465724
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -78.23912487019645,
+          43.37043953437501
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -79.81834324118762,
+          43.63011866108654
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.50010577549489,
+          47.391870444036364
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Nazca",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -75.3517007457893,
+          -14.15309558252722
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.65546860362668,
+          8.772178694547637
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.443895299369675,
+          23.953523847607592
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Glades Culture",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.28786255110954,
+          27.28928919457467
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.3941850033570224,
+          53.29863988671875
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -5.2258461474609375,
+          55.53954493443998
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.154335558105468,
+          55.70598887934577
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -5.9970070341796875,
+          55.88692930360609
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -7.450051708984375,
+          56.98757339275119
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -7.342449849609375,
+          57.19048223865558
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -7.288784644714124,
+          57.43965404785156
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -7.231829384419835,
+          57.59128946972663
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -7.027151810188178,
+          57.89651669189459
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.843727943847656,
+          58.22047491880279
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.544675893554687,
+          58.24051606069275
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.9518755732421873,
+          58.80231333425015
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.295501783102274,
+          58.853379321777346
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.1749181188723954,
+          59.020724110351566
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.5167089243026832,
+          59.27512411914066
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.0012378455630095,
+          59.29931568359379
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.1960567968750002,
+          60.38766550863047
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.086590654296875,
+          60.62068393167859
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.8573199765624999,
+          60.78106320096788
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -7.120276583984375,
+          62.19466962467655
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.6074899990234375,
+          54.16552441580507
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.4427225703125,
+          57.48056405055801
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.34983722751454,
+          28.24804600097656
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.94097352636726,
+          29.980684565611234
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.88315969900583,
+          29.85293248828125
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.00439831347657,
+          30.66844865258923
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.5239795331166,
+          30.33964833935547
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.808250046875,
+          23.504188531799688
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.75974906998266,
+          32.69271294580078
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          123.79338868451562,
+          24.333625991210937
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          125.30319001716384,
+          24.761724127441404
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          124.16960343164062,
+          24.38133967374235
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.72454131494142,
+          26.173767738771804
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.76384226873954,
+          26.349943533691405
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.95774027929687,
+          27.769456205375896
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.56364225047253,
+          27.38260218457035
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.9737988919673,
+          28.307374567871094
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.24738017861637,
+          28.1270413867188
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.72790628222663,
+          29.63906486844281
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Pomeranian culture ",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.614944324168498,
+          53.822850304247304
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Sambian-Nothangian culture",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          20.8444619742825,
+          54.425606736332284
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Bell-shaped burials culture",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          19.872492118255416,
+          51.16462625689497
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Western Masurian culture",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          20.534472271850177,
+          53.31866179194588
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Eastern Masurian culture",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.11309197071096,
+          52.51094434296656
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Curonians",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.219963223642573,
+          54.94913022063061
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Brushed Pottery culture",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          26.478807164480134,
+          54.948090006768304
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Milograd culture",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          29.84192067668379,
+          51.73788860424611
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Plain-Pottery culture",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          33.591996504717464,
+          54.58299897712921
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.316158238382744,
+          51.46739166659389
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.763973985725439,
+          60.98591168857883
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.55575900079224,
+          33.36933506250006
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Silla",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.6226954697119,
+          36.9168005847764
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          59.27840977753252,
+          45.08646414834129
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Alans",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          43.52168362140323,
+          43.5440205757386
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Kushan Empire",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.83014477500848,
+          37.88071856954637
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Scythians",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          34.475225308654615,
+          46.81347470209175
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.86925008984383,
+          37.494639868890374
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          124.68138052593704,
+          37.94834522851563
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Paekche",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.38368240481832,
+          35.539691120029566
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gaya",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.0831223292141,
+          35.10858787687114
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Koguryo",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.53451859519492,
+          38.12199629435293
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Koguryo",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.46439427220761,
+          41.16850722252401
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(unknown)",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          86.50183447001731,
+          46.992708623954385
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Arakan",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          92.4317075665157,
+          21.464808073275545
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Nabatean Kingdom",
+        "code": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          36.31226636188757,
+          29.37318814145043
+        ]
+      }
+    }
+  ]
+}
