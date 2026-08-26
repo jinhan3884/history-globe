@@ -1,4 +1,6 @@
 import * as Cesium from 'cesium';
+// @ts-expect-error — @mapbox/polylabel has no bundled type declarations
+import polylabel from '@mapbox/polylabel';
 import type { FeatureCollection } from '../geojson/types';
 import { UNNAMED_LABEL } from '../geojson/types';
 
@@ -85,16 +87,13 @@ export async function renderGeoJson(
     const now = Cesium.JulianDate.now();
     const h = entity.polygon.hierarchy?.getValue(now);
     if (!h || h.positions.length < 3) continue;
-    let lonSum = 0,
-      latSum = 0;
+    const ringDeg: [number, number][] = [];
     for (const p of h.positions) {
       const c = Cesium.Cartographic.fromCartesian(p);
-      lonSum += c.longitude;
-      latSum += c.latitude;
+      ringDeg.push([Cesium.Math.toDegrees(c.longitude), Cesium.Math.toDegrees(c.latitude)]);
     }
-    const lon = lonSum / h.positions.length;
-    const lat = latSum / h.positions.length;
-    const centroid = Cesium.Cartesian3.fromRadians(lon, lat, 0);
+    const poi = polylabel([ringDeg], 0.5) as [number, number];
+    const centroid = Cesium.Cartesian3.fromDegrees(poi[0], poi[1], 0);
     const labelEntity = viewer.entities.add({
       position: centroid,
       label: {
