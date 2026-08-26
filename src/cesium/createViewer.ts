@@ -31,14 +31,27 @@ export function createViewer(container: HTMLElement): Cesium.Viewer {
     fullscreenButton: false,
     selectionIndicator: false,
     infoBox: false,
-    // Natural Earth II: bundled with CesiumJS, offline-capable, no token.
-    baseLayer: Cesium.ImageryLayer.fromProviderAsync(
-      Cesium.TileMapServiceImageryProvider.fromUrl(
-        Cesium.buildModuleUrl('Assets/Textures/NaturalEarthII'),
-      ),
-      {},
-    ),
+
   });
+
+  // Dark ocean: solid deep navy imagery layer covering the entire globe
+  const darkNavy = Cesium.Color.fromCssColorString('#0a1628');
+  const canvas2d = document.createElement('canvas');
+  canvas2d.width = 1;
+  canvas2d.height = 1;
+  const ctx = canvas2d.getContext('2d')!;
+  ctx.fillStyle = '#0a1628';
+  ctx.fillRect(0, 0, 1, 1);
+  viewer.imageryLayers.addImageryProvider(
+    new Cesium.SingleTileImageryProvider({
+      tileWidth: 1,
+      tileHeight: 1,
+      url: canvas2d.toDataURL(),
+    }),
+  );
+  viewer.scene.globe.baseColor = darkNavy;
+
+
 
   // Dev-only handle for browser-automation smoke tests (camera positioning).
   // The cast keeps `any` out; the property is never read by app code and the
