@@ -13,7 +13,14 @@ import * as Cesium from 'cesium';
  */
 
 export function createViewer(container: HTMLElement): Cesium.Viewer {
+  // Suppress Cesium's built-in "CESIUM ion" credit container — we don't use
+  // Ion. Attribution is provided via the app's own attribution bar.
+  const creditDiv = document.createElement('div');
+  creditDiv.style.display = 'none';
+  container.append(creditDiv);
+
   const viewer = new Cesium.Viewer(container, {
+    creditContainer: creditDiv,
     geocoder: false,
     homeButton: false,
     sceneModePicker: false,

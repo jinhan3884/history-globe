@@ -11,8 +11,7 @@
  * relative to the site root. Works for `vite dev`, `vite preview`, and the
  * copied path inside the production `dist/` tree.
  */
-export const DATASET_PATH: string =
-  '/data/world_100.geojson' as const;
+export const DATASET_PATH: string = '/data/world_100.geojson' as const;
 
 /**
  * Privacy-friendly analytics placeholder. Empty by default: no analytics
