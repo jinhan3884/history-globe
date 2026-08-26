@@ -1,6 +1,4 @@
 import * as Cesium from 'cesium';
-// @ts-expect-error — @mapbox/polylabel has no bundled type declarations
-import polylabel from '@mapbox/polylabel';
 import type { FeatureCollection } from '../geojson/types';
 import { UNNAMED_LABEL } from '../geojson/types';
 
@@ -58,13 +56,22 @@ export async function renderGeoJson(
     if (!entity.polygon) continue;
     const h = entity.polygon.hierarchy?.getValue(now);
     if (!h) continue;
-    const ringDeg: [number, number][] = [];
+    // Bounding-box center: the visual center of the polygon on screen.
+    // polylabel (pole of inaccessibility) is technically correct but can
+    // place labels far from the visual center for irregular shapes.
+    let minX = 180, maxX = -180, minY = 90, maxY = -90;
     for (const p of h.positions) {
       const c = Cesium.Cartographic.fromCartesian(p);
-      ringDeg.push([Cesium.Math.toDegrees(c.longitude), Cesium.Math.toDegrees(c.latitude)]);
+      const lon = Cesium.Math.toDegrees(c.longitude);
+      const lat = Cesium.Math.toDegrees(c.latitude);
+      if (lon < minX) minX = lon;
+      if (lon > maxX) maxX = lon;
+      if (lat < minY) minY = lat;
+      if (lat > maxY) maxY = lat;
     }
-    const poi = polylabel([ringDeg], 0.5) as [number, number];
-    const centroid = Cesium.Cartesian3.fromDegrees(poi[0], poi[1], 0);
+    const cx = (minX + maxX) / 2;
+    const cy = (minY + maxY) / 2;
+    const centroid = Cesium.Cartesian3.fromDegrees(cx, cy, 0);
     const labelEntity = viewer.entities.add({
       position: centroid,
       label: {
