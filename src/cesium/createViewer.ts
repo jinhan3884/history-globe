@@ -21,6 +21,10 @@ export function createViewer(container: HTMLElement): Cesium.Viewer {
 
   const viewer = new Cesium.Viewer(container, {
     creditContainer: creditDiv,
+    // No Ion base layer: the app is fully self-contained (Natural Earth II
+    // imagery + the dark navy overlay below). Requesting the default Ion
+    // imagery without a token only produces 401 console noise.
+    baseLayer: false,
     geocoder: false,
     homeButton: false,
     sceneModePicker: false,
@@ -31,7 +35,6 @@ export function createViewer(container: HTMLElement): Cesium.Viewer {
     fullscreenButton: false,
     selectionIndicator: false,
     infoBox: false,
-
   });
 
   // Dark ocean: solid deep navy imagery layer covering the entire globe
@@ -50,8 +53,6 @@ export function createViewer(container: HTMLElement): Cesium.Viewer {
     }),
   );
   viewer.scene.globe.baseColor = darkNavy;
-
-
 
   // Dev-only handle for browser-automation smoke tests (camera positioning).
   // The cast keeps `any` out; the property is never read by app code and the

@@ -10,10 +10,13 @@ import { trimThinOverlaps } from './geojson/trimOverlaps';
 import { formatDevSummary, formatDevRepairSummary } from './geojson/report';
 import { createLoading } from './ui/loading';
 import { createErrorPanel } from './ui/errorPanel';
-import { createTooltip } from './ui/tooltip';
 import { createAboutPanel } from './ui/aboutPanel';
-import { UNNAMED_LABEL } from './geojson/types';
+import {
+  createKnowledgePanel,
+  type KnowledgePanelController,
+} from './ui/knowledgePanel';
 import { createYearSelector } from './ui/yearSelector';
+import { createTooltip } from './ui/tooltip';
 import { loadYear } from './geojson/loadYear';
 
 /**
@@ -22,6 +25,7 @@ import { loadYear } from './geojson/loadYear';
  *   - the loading overlay (created by createLoading)
  *   - the error overlay (created by createErrorPanel)
  *   - the tooltip (created by createTooltip)
+ *   - the knowledge panel (created by createKnowledgePanel)
  *   - a small attribution credit (created here)
  *
  * Order matters for visual stacking: attribution is appended last so it is
@@ -53,23 +57,20 @@ function rendering(
   }
 
   const tooltip = createTooltip(root);
+  const knowledgePanel = createKnowledgePanel(root);
+  // Diagnostic seam: lets a user open the panel from DevTools without a
+  // click, separating rendering issues from input issues.
+  (
+    window as unknown as { __historyAtlasPanel?: KnowledgePanelController }
+  ).__historyAtlasPanel = knowledgePanel;
   installInteraction(viewer, tooltip, {
     onHoverName(name) {
       // Hover name is surfaced via the tooltip element only in M1.
       void name;
     },
     onClick(name) {
-      // Click selection is shown via the browser console in dev mode only;
-      // a proper side panel arrives in M5.
-      if (import.meta.env.DEV) {
-        if (name !== null) {
-          if (name === UNNAMED_LABEL) {
-            console.info('[history-atlas] clicked unnamed feature');
-          } else {
-            console.info(`[history-atlas] clicked feature: ${name}`);
-          }
-        }
-      }
+      // Polygon click → entity → knowledge layer → side panel (M5).
+      void knowledgePanel.openForName(name);
     },
   });
 
@@ -193,7 +194,7 @@ function mountAttribution(root: HTMLElement): void {
   const credit = document.createElement('div');
   credit.className = 'attribution';
   credit.innerHTML = [
-        '<strong>History Atlas</strong> — History has coordinates.',
+    '<strong>History Atlas</strong> — History has coordinates.',
     ' <img src="/cesiumjs-logomark.svg" alt="CesiumJS" style="height:14px;vertical-align:middle;display:inline-block;margin:0 2px;"> ',
     'Powered by <a href="https://cesium.com/platform/cesiumjs/" target="_blank" rel="noopener">CesiumJS</a>.',
     ' Historical basemap: world, 100 CE.',

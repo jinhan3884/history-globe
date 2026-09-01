@@ -543,3 +543,33 @@ approach 0.053 deg) and an Alaska north-coast blade (0.0000 deg).
 - tests: near-touch heal + two guard cases (46 pass)
 - browser verified: Siberia and Europe views clean; the Adriatic blade is
   reduced to the Roman Empire's genuine thin coastal strip
+
+## Knowledge Layer v1 (2026-09-01)
+
+Work order: `2026-09-01() Project_Alexandria_OMP_Knowledge_Layer_Work_Order.md`
+(Wikidata + Wikipedia Knowledge Layer).
+
+- Gate 1 audit: vanilla TS + Vite + Cesium; polygon props
+  NAME/ABBREVN/SUBJECTO/BORDERPRECISION/PARTOF; click hook
+  `installInteraction(...).onClick`; static deployment, no backend.
+  Scale discovery: 53 year files, 15,998 features, 3,024 distinct NAME
+  spellings.
+- Gate 2 (Phase A): entity extraction + registry
+  (`scripts/extract-entities.ts`, `src/knowledge/{types,slug,entityRegistry}.ts`)
+  -> `data/entities.json` with 3,004 entities (20 spelling-variant merges;
+  5,835 unnamed features skipped). 13 unit tests.
+- Gate 3 (Phase B): Wikidata resolution with name/alias + polity-type
+  closure (SPARQL P279* of 4 roots) + temporal scoring; statuses
+  confirmed/probable/ambiguous/unmatched; response caches for deterministic
+  re-runs; manual override file. (unit tests incl. API-failure behavior)
+- Gate 4 (Phase C): `scripts/build-knowledge.ts` -> pre-generated
+  `data/knowledge/entities-knowledge.json` (facts P571/P576/P36/P155/P1366 +
+  English Wikipedia summary <=800 chars, provenance timestamps).
+- Gate 5 (Phase D): knowledge panel (right-side desktop / bottom sheet
+  mobile) wired to the existing polygon click handler; loading/matched/
+  unmatched/error states; attribution + Read more. Browser smoke test on
+  dev server: globe intact, click -> panel ("Khoiasan" via entity fallback),
+  unmatched clicks render the neutral message, second click updates panel.
+- Gate 6: full vitest suite, typecheck, prettier, oxlint, production build
+  (incl. `dist/data/knowledge/entities-knowledge.json` copy) — see final
+  work report for exact statistics.

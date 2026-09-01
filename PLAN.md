@@ -186,6 +186,27 @@ Exit criteria:
 - Public URL works.
 - No token or secret appears in built assets.
 - Rollback instructions exist.
+---
+
+## Milestone 7 — Knowledge Layer (Wikidata + Wikipedia)
+
+Target: 1–2 days
+
+Work order: `2026-09-01() Project_Alexandria_OMP_Knowledge_Layer_Work_Order.md`
+
+- [x] Entity extraction from all 53 polygon files → Entity Registry (`data/entities.json`). (3,004 entities; dedup across time slices + case/whitespace/diacritics variants)
+- [x] Internal `ha:polity:*` entity IDs; Wikidata QID kept as external link only.
+- [x] Wikidata entity resolution (name/alias + polity-type closure + temporal plausibility), statuses confirmed/probable/ambiguous/unmatched, cached + deterministic. (`scripts/match-wikidata.ts`)
+- [x] Manual override file (`data/entity-overrides.json`) — beats automatic matching.
+- [x] Wikidata facts + Wikipedia summary pre-build (`scripts/build-knowledge.ts` → `data/knowledge/entities-knowledge.json`).
+- [x] Knowledge Panel UI on polygon click (right-side desktop / bottom sheet mobile), unmatched + loading + error states. (`src/ui/knowledgePanel.ts`)
+- [x] Unit tests for extraction, matching, overrides, Wikipedia fallback, runtime lookup. (tests/entityRegistry, matching, wikipedia, knowledgeService)
+
+Exit criteria:
+
+- Polygon click shows a knowledge panel; unmatched polygons show a neutral message without errors.
+- Knowledge/API failure never breaks globe rendering (runtime uses only pre-generated static JSON).
+- Attribution to Wikidata/Wikipedia visible with a "Read more" link.
 
 ---
 

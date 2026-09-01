@@ -11,5 +11,10 @@ if (!root) {
       'This is an authoring error, not a runtime failure.',
   );
 }
-
 mountApp(root);
+
+// Build marker: makes it instantly verifiable in DevTools which bundle is
+// running (e.g. after a deployment, when browser caches are in question).
+console.info(
+  '[history-atlas] knowledge-layer v1 — click any territory to open its panel.',
+);

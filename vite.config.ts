@@ -47,6 +47,16 @@ export default defineConfig({
           dest: 'data',
           rename: { stripBase: DATA_STRIP_BASE },
         },
+        {
+          src: 'data/entities.json',
+          dest: 'data',
+          rename: { stripBase: DATA_STRIP_BASE },
+        },
+        {
+          src: 'data/knowledge/entities-knowledge.json',
+          dest: 'data/knowledge',
+          rename: { stripBase: DATA_STRIP_BASE },
+        },
       ],
     }),
   ],
